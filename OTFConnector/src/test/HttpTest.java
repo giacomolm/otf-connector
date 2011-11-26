@@ -1,7 +1,7 @@
 package test;
 
 
-import core.Connector_old;
+import core_old.Connector_old;
 
 public class HttpTest {
 

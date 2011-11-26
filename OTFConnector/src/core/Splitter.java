@@ -50,8 +50,8 @@ public class Splitter extends Primitive{
 			@Override
 			public void configure() throws Exception {
 				// TODO Auto-generated method stub
-				p.getRoute();
 				
+				includeRoutes(p.getRoute());
 				from(source_uri).
 				split().method(methodclass, methodname).
 				dynamicRouter(bean(router, "route"));
@@ -67,7 +67,7 @@ public class Splitter extends Primitive{
 			@Override
 			public void configure() throws Exception {
 				// TODO Auto-generated method stub
-				p.getRoute();
+				includeRoutes(p.getRoute());
 				
 				from(source_uri).
 				split().method(methodclass, methodname).

@@ -1,6 +1,7 @@
 package test;
 
 import core.*;
+import core_old.Connector_old;
 
 public class SimpleTransformer {
 	

@@ -30,7 +30,6 @@ public class Router {
 		try {
 			Object t = methodclass.newInstance();
 			Collection<String> effective_receiver = (Collection) myMethod.invoke(t,body,receiver_uri);
-			
 			if(!effective_receiver.isEmpty()){
 				Iterator<String> i = effective_receiver.iterator();
 				String result = i.next();

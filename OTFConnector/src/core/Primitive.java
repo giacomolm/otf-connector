@@ -10,9 +10,15 @@ public abstract class Primitive {
 	protected String source_uri;
 	protected ArrayList<String> receivers_uri;
 	
+	public Primitive(){	}
+	
 	public Primitive(String source_uri){
 		this.source_uri = source_uri;
 	}
+	
+	/*public Primitive(ArrayList<String> receiversUri){
+		receivers_uri=receiversUri;
+	}*/
 	
 	public Primitive(String source_uri, String receiver_uri){
 		this.source_uri = source_uri;
