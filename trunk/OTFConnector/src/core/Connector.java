@@ -35,7 +35,27 @@ public class Connector {
 				Primitive p = i.next();
 				context.addRoutes(p.getRoute());
 			}
+
 			context.start();
+			/*Customer c = new Customer(1,"Giacomo");
+			Department d1 =  new Department(1, "informatica");
+			Department d2 =  new Department(2, "matematica");
+			c.addDepartments(d1);
+			c.addDepartments(d2);
+			ProducerTemplate template = context.createProducerTemplate();
+			template.sendBody("direct:start", c);
+			
+			PollingConsumer consumer = context.getEndpoint("vm:stop2").createPollingConsumer();
+			consumer.start();
+			Exchange e = consumer.receive();
+			/*Customer customer = e.getIn().getBody(Customer.class);
+			System.out.println(customer.getDepartments().get(0).name);
+			Department d = e.getIn().getBody(Department.class);
+			System.out.println(d.name);*/
+			PollingConsumer consumer = context.getEndpoint("log:foo").createPollingConsumer();
+			consumer.start();
+			Exchange e = consumer.receive();
+			System.out.println(e);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -14,7 +14,7 @@ public class Transformer extends Primitive{
 			public void configure() throws Exception {
 				// TODO Auto-generated method stub
 				from(source_uri).
-				split().method(methodclass, methodname).
+				transform().method(methodclass, methodname).
 				to(getReceiver_uri());
 			}
 		};
@@ -25,7 +25,7 @@ public class Transformer extends Primitive{
 		myroute = new RouteBuilder() {
 			@Override
 			public void configure() throws Exception {
-				p.getRoute();
+				includeRoutes(p.getRoute());
 				// TODO Auto-generated method stub
 				from(source_uri).
 				transform().method(methodclass, methodname).
@@ -40,8 +40,8 @@ public class Transformer extends Primitive{
 		myroute = new RouteBuilder() {
 			@Override
 			public void configure() throws Exception {
-				p.getRoute();
-				// TODO Auto-generated method stub
+				
+				includeRoutes(p.getRoute());
 				from(source_uri).
 				transform().method(methodclass, methodname).
 				to(getReceiver_uri());
