@@ -62,4 +62,5 @@ public abstract class Primitive {
 	public void setRoute(RouteBuilder myroute) {
 		this.myroute = myroute;
 	}
+	
 }
