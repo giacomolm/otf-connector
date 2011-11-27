@@ -22,7 +22,8 @@ public class Connector {
 
 	private CamelContext context;
 	private Collection<Primitive> primitivecollection;
- 
+	boolean started = false;
+	
 	public Connector() {
 		// TODO Auto-generated constructor stub
 		context = new DefaultCamelContext();
@@ -35,7 +36,7 @@ public class Connector {
 				Primitive p = i.next();
 				context.addRoutes(p.getRoute());
 			}
-
+			started=true;
 			context.start();
 			/*Customer c = new Customer(1,"Giacomo");
 			Department d1 =  new Department(1, "informatica");
@@ -43,19 +44,19 @@ public class Connector {
 			c.addDepartments(d1);
 			c.addDepartments(d2);
 			ProducerTemplate template = context.createProducerTemplate();
-			template.sendBody("direct:start", c);
+			template.sendBody("direct:start", "contento");
 			
-			PollingConsumer consumer = context.getEndpoint("vm:stop2").createPollingConsumer();
+			/*PollingConsumer consumer = context.getEndpoint("vm:stop2").createPollingConsumer();
 			consumer.start();
 			Exchange e = consumer.receive();
 			/*Customer customer = e.getIn().getBody(Customer.class);
-			System.out.println(customer.getDepartments().get(0).name);
-			Department d = e.getIn().getBody(Department.class);
-			System.out.println(d.name);*/
-			PollingConsumer consumer = context.getEndpoint("log:foo").createPollingConsumer();
+			System.out.println(customer.getDepartments().get(0).name);*/
+			/*Department d = e.getIn().getBody(Department.class);
+			System.out.println(d.name);
+			/*PollingConsumer consumer = context.getEndpoint("log:foo").createPollingConsumer();
 			consumer.start();
 			Exchange e = consumer.receive();
-			System.out.println(e);
+			System.out.println(e);*/
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -78,5 +79,17 @@ public class Connector {
 	
 	public void add(Primitive p){
 		primitivecollection.add(p);
+	}
+
+	public CamelContext getContext() {
+		return context;
+	}
+
+	public void setContext(CamelContext context) {
+		this.context = context;
+	}
+	
+	public boolean isStarted(){
+		return started;
 	}
 }

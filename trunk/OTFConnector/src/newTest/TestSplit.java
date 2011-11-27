@@ -22,10 +22,12 @@ public class TestSplit {
 		}
 		c.stop();
 	}
-	
-	public ArrayList<String> routing(String body,ArrayList<String> receivers){
-		ArrayList<String> al = new ArrayList<String>();
-		al.add("vm:stop");
+	static int i=1;
+	//Questo metodo viene chiamato per ogni oggetto splittato
+	public ArrayList<String> routing(Object body){
+		//System.out.println(((Department)body));
+		ArrayList<String> al = new ArrayList<String>();	
+		al.add("vm:stop"+i++);
 		return al;
 	}
 }

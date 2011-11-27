@@ -1,5 +1,7 @@
 package core;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
 public class Consumer extends Primitive{
@@ -10,7 +12,8 @@ public class Consumer extends Primitive{
 			@Override
 			public void configure() throws Exception {
 				// TODO Auto-generated method stub
-				from(source_uri).clearOutput();
+				System.out.println("Prova");
+				
 			}
 		};
 	}
@@ -22,7 +25,14 @@ public class Consumer extends Primitive{
 			public void configure() throws Exception {
 				// TODO Auto-generated method stub
 				includeRoutes(p.getRoute());
-				from(source_uri).clearOutput();
+				from(source_uri).
+				process(new Processor() {
+					@Override
+					public void process(Exchange e) throws Exception {
+						// TODO Auto-generated method stub
+						System.out.println("consumed "+e);
+					}
+				});
 			}
 		};
 	}

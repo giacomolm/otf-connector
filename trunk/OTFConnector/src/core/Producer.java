@@ -1,38 +1,56 @@
 package core;
 
-import java.util.ArrayList;
-
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
-import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 
 public class Producer extends Primitive{
-
-	public Producer(String receiverUri, final Object o) {
+	
+	org.apache.camel.ProducerTemplate producer;//= ( new DefaultCamelContext()).createProducerTemplate();
+	Primitive p = null;
+	
+	
+	private Object message;
+	public Producer(final Connector c,String receiverUri, final Object o) {
 		setReceiver_uri(receiverUri);
+		setMessage(o);
+		producer = c.getContext().createProducerTemplate();
 		myroute = new RouteBuilder() {
 			@Override
 			public void configure() throws Exception {
 				// TODO Auto-generated method stub
-				outBody().in(o);
-				sendTo(getReceiver_uri());
+				producer.sendBody(getReceiver_uri(), o);		
 			}
 		};
 	}
 	
-	public Producer(final Primitive p, String receiverUri, final Object o) {
-		super("",receiverUri);
+	public Producer(Connector c, final Primitive p, String receiverUri, final Object o) {
+		setReceiver_uri(receiverUri);
+		setMessage(o);
+		this.p = p;
+		producer = c.getContext().createProducerTemplate();
 		myroute = new RouteBuilder() {
 			@Override
 			public void configure() throws Exception {
 				// TODO Auto-generated method stub
 				includeRoutes(p.getRoute());
-				body().in(o);
-				sendTo(getReceiver_uri());
+				producer.sendBody(getReceiver_uri(), o);
 			}
 		};
 	}
 
+	public org.apache.camel.ProducerTemplate getProducer() {
+		return producer;
+	}
+
+	public void setProducer(org.apache.camel.ProducerTemplate producer) {
+		this.producer = producer;
+	}
+
+	public void setMessage(Object message) {
+		this.message = message;
+	}
+
+	public Object getMessage() {
+		return message;
+	}
 
 }
