@@ -1,14 +1,16 @@
-package newTest;
+package test;
 
 import java.util.ArrayList;
 
+import newTest.CustomerService;
+
 import core.Connector;
-import core.Splitter;
+import core.compoundterm.primitiveterm.Split;
 
 public class TestSplit {
 	
 	public static void main(String[] args) {
-		Splitter splitter = new Splitter("direct:start");
+		Split splitter = new Split("direct:start");
 		splitter.setSplittingLogic(CustomerService.class, "splitDepartments");
 		splitter.setRoutingLogic(TestSplit.class, "routing");
 		Connector c = new Connector();

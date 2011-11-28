@@ -1,4 +1,4 @@
-package core;
+package core.compoundterm.primitiveterm;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
