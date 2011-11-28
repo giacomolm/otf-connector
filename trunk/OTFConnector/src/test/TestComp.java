@@ -1,19 +1,22 @@
-package newTest;
+package test;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import test.Customer;
+import newTest.Customer;
+import newTest.CustomerService;
+import newTest.Department;
+
 import core.Connector;
-import core.Splitter;
-import core.Transformer;
+import core.compoundterm.primitiveterm.Split;
+import core.compoundterm.primitiveterm.Trans;
 
 public class TestComp {
 
 	public static void main(String[] args) {
-		Transformer t = new Transformer("direct:start", "vm:stop");
+		Trans t = new Trans("direct:start", "vm:stop");
 		t.setTransformLogic(TestComp.class, "addLastName");
-		Splitter s = new Splitter(t);
+		Split s = new Split(t);
 		s.setSplittingLogic(CustomerService.class, "splitDepartments");
 		s.setRoutingLogic(TestComp.class, "routing");
 		Connector c = new Connector();

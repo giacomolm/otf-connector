@@ -16,24 +16,26 @@ import org.apache.camel.Route;
 import org.apache.camel.RoutesBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
 
+import core.compoundterm.primitiveterm.PrimitiveTerm;
+
 
 
 public class Connector {
 
 	private CamelContext context;
-	private Collection<Primitive> primitivecollection;
+	private Collection<PrimitiveTerm> primitivecollection;
 	boolean started = false;
 	
 	public Connector() {
 		// TODO Auto-generated constructor stub
 		context = new DefaultCamelContext();
-		primitivecollection = new ArrayList<Primitive>();
+		primitivecollection = new ArrayList<PrimitiveTerm>();
 	}
 	
 	public void start(){
 		try {
-			for(Iterator<Primitive> i = primitivecollection.iterator(); i.hasNext();){
-				Primitive p = i.next();
+			for(Iterator<PrimitiveTerm> i = primitivecollection.iterator(); i.hasNext();){
+				PrimitiveTerm p = i.next();
 				context.addRoutes(p.getRoute());
 			}
 			started=true;
@@ -77,7 +79,7 @@ public class Connector {
 		return context.getRoutes();
 	}
 	
-	public void add(Primitive p){
+	public void add(PrimitiveTerm p){
 		primitivecollection.add(p);
 	}
 
