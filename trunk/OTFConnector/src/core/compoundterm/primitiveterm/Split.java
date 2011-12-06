@@ -25,7 +25,7 @@ public class Split extends PrimitiveTerm{
 				@Override
 				public void configure() throws Exception {
 					// TODO Auto-generated method stub
-					from(sourceUri).
+					from(getSource()).
 					split().method(methodclass, methodname).
 					dynamicRouter(bean(router, "route"));
 				}
@@ -45,7 +45,7 @@ public class Split extends PrimitiveTerm{
 				@Override
 				public void configure() throws Exception {
 					// TODO Auto-generated method stub
-					from(sourceUri).
+					from(getSource()).
 					split().method(methodclass, methodname).
 					dynamicRouter(bean(router, "route"));
 				}
@@ -66,7 +66,7 @@ public class Split extends PrimitiveTerm{
 				@Override
 				public void configure() throws Exception {
 					// TODO Auto-generated method stub
-					from(sourceUri).
+					from(getSource()).
 					split().method(methodclass, methodname).
 					dynamicRouter(bean(router, "route"));
 				}
