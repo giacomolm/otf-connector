@@ -33,9 +33,9 @@ public class Trans extends PrimitiveTerm{
 				@Override
 				public void configure() throws Exception {
 					// TODO Auto-generated method stub
-					from(sourceUri).
+					from(getSource()).
 					transform().method(methodclass, methodname).
-					to(receiverUri);
+					to(getReceiver());
 				}
 			});
 		} catch (Exception e) {
