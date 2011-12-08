@@ -14,7 +14,7 @@ import core.compoundterm.primitiveterm.Split;
 public class First {
 
 	public static void main(String[] args) {
-		CompoundTerm comp = new Plug(new Plug(new Prod("vm:start", String.class, "Ciao"), new Cons("vm:stop",String.class)),new Cons("vm:start",String.class));
+		CompoundTerm comp = new Plug(new Plug(new Prod("vm://start", String.class, "Ciao"), new Cons("vm:stop",String.class)),new Cons("vm:start",String.class));
 		//System.out.println(comp+" "+comp.getSources_uri());
 		/*Iterator<Port> i = comp.getSources_uri().iterator();
 		if(i.hasNext()){
@@ -22,7 +22,12 @@ public class First {
 			System.out.println(p.getTerm()+" "+p.getTerm().getSources_uri());
 		}*/
 		comp.start();
-
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

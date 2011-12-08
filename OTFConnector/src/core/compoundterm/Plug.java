@@ -15,10 +15,6 @@ public class Plug extends CompoundTerm{
 	
 	public Plug(CompoundTerm c1, CompoundTerm c2) {
 		super(c1.getSources_uri(),c1.getReceivers_uri());
-		/*for(Iterator<Port> i = c2.getSources_uri().iterator(); i.hasNext();){
-			Port p = i.next();
-			sources_uri.add(p);
-		}*/
 		addSources_uri(c2.getSources_uri());
 		addReceivers_uri(c2.getReceivers_uri());
 		//System.out.println(c1+" "+c1.getSources_uri());
@@ -26,9 +22,6 @@ public class Plug extends CompoundTerm{
 		c2.getSources_uri().clear();
 		c1.getReceivers_uri().clear();
 		c2.getReceivers_uri().clear();
-		/*c1.getReceivers_uri().remove(c1.getReceivers_uri());
-		c2.getSources_uri().remove(c2.getSources_uri());
-		c2.getReceivers_uri().remove(c2.getReceivers_uri());*/
 		//System.out.println("Ports: "+getSources_uri()+" "+c1.getSources_uri()+" "+c2.getSources_uri());
 		this.c1 = c1;
 		this.c2 = c2;

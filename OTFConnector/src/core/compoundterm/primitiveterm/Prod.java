@@ -9,40 +9,25 @@ import core.Port;
 
 public class Prod extends PrimitiveTerm{
 	
-	org.apache.camel.ProducerTemplate producer;//= ( new DefaultCamelContext()).createProducerTemplate();
+	org.apache.camel.ProducerTemplate prod;
 	PrimitiveTerm p = null;
-	
+	String receiver;
 	
 	private Object message;
 	public Prod(final String receiverUri, Class type,final Object o) {
 		super(new Port(),new Port(receiverUri, type, order));
-		order++;
+		prod = context.createProducerTemplate();
 		setMessage(o);
-		producer = context.createProducerTemplate();
-		try {
-			context.addRoutes(new RouteBuilder() {
-				@Override
-				public void configure() throws Exception {
-					// TODO Auto-generated method stub
-					producer.sendBody(getReceiver().getUri(), o);
-
-				}
-			});
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		setReceiver(receiverUri);
+		System.out.println("Component "+this+" added, to: "+getReceiver().getUri());
+		order++;
 	}
 	
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
-		try {
-			context.start();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		System.out.println("Sending message "+message+" to "+context.getEndpoint(receiver));
+		producer.sendBody(context.getEndpoint(receiver), message);
 	}
 
 
@@ -60,6 +45,10 @@ public class Prod extends PrimitiveTerm{
 
 	public Object getMessage() {
 		return message;
+	}
+
+	public void setReceiver(String receiver) {
+		this.receiver = receiver;
 	}
 
 }

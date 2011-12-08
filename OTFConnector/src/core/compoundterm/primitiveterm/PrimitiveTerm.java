@@ -19,6 +19,9 @@ public abstract class PrimitiveTerm extends CompoundTerm {
 	/*public PrimitiveTerm(String source_uri){
 		this.source_uri = source_uri;
 	}*/
+	public PrimitiveTerm(Port source_uri){
+		super(source_uri);
+	}
 	
 	public PrimitiveTerm(Port source_uri, Port receiver_uri){
 		super(source_uri,receiver_uri);
@@ -44,21 +47,22 @@ public abstract class PrimitiveTerm extends CompoundTerm {
 		try {
 			for(int i=0; i<order; i++){
 				Iterator<Port> p = sources_uri.iterator();
-				System.out.println("Ha il prossimo? "+p.hasNext());
 				while(p.hasNext()){
 					final Port temp = p.next();
 					context.addRoutes(new RouteBuilder() {
 							@Override
 							public void configure() throws Exception {
 								// TODO Auto-generated method stub
-								from(temp.getUri()).
+								from(context.getEndpoint(temp.getUri())).
 								to(internal+""+temp.getId());
 							}
 						});
 				}
 			}
+			
 			context.start();
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
