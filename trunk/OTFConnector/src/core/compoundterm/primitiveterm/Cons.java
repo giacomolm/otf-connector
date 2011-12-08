@@ -19,18 +19,27 @@ public class Cons extends PrimitiveTerm{
 				@Override
 				public void configure() throws Exception {
 					// TODO Auto-generated method stub
-					from(internal+""+order++).
+					from(internal+""+order).
 					process(new Processor() {
 						@Override
 						public void process(Exchange e) throws Exception {
-							System.out.println("consumed "+e);
+							System.out.println("consumed "+e+" by "+sourceUri);
 						}
 					});
 				}
 			});
+			System.out.println("Component "+this+" added, source:  ("+internal+""+order+")");
+			order++;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public void start() {
+		// TODO Auto-generated method stub
+		System.out.println("Component "+this+" started");
+		super.start();
 	}
 }

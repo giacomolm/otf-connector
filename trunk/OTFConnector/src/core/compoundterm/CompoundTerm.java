@@ -27,11 +27,16 @@ public abstract class CompoundTerm {
 	protected static int order=0;
 	
 	public CompoundTerm(){
-		
+	}
+	
+	public CompoundTerm(Port sourceuri){
+		sourceuri.setTerm(this);
+		sources_uri.add(sourceuri);
 	}
 	
 	public CompoundTerm(Port sourceuri, Port receiveruri) {
 		sourceuri.setTerm(this);
+		receiveruri.setTerm(this);
 		sources_uri.add(sourceuri);
 		receivers_uri.add(receiveruri);
 		//addroute da source del compound a source del primitivo
@@ -39,6 +44,7 @@ public abstract class CompoundTerm {
 	
 	public CompoundTerm(Port sourceuri, Collection<Port> receiversuri) {
 		receivers_uri.addAll(receiversuri);
+		sourceuri.setTerm(this);
 		sources_uri.add(sourceuri);
 	}
 	
@@ -65,6 +71,10 @@ public abstract class CompoundTerm {
 		receivers_uri.addAll(receiversUri);
 	}
 	
+	public void addReceiver(Port receiver){
+		receivers_uri.add(receiver);
+	}
+	
 	protected Port getSource(){
 		return sources_uri.iterator().next();
 	}
@@ -86,7 +96,7 @@ public abstract class CompoundTerm {
 								// TODO Auto-generated method stub
 								Port temp = p.next();
 								if(temp.getUri()!=null)
-									from(temp.getUri()).to(internal+""+temp.getId());
+									from(context.getEndpoint(temp.getUri())).to(internal+""+temp.getId());
 							}
 					});
 				} catch (Exception e) {
@@ -94,9 +104,11 @@ public abstract class CompoundTerm {
 					e.printStackTrace();
 				}
 			}
-			//System.out.println(context.getRouteDefinitions());
+			if(!context.getRouteDefinitions().isEmpty())
+				System.out.println("Route defined: "+context.getRouteDefinitions());
 			context.start();
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
