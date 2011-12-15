@@ -21,19 +21,24 @@ public class Split extends PrimitiveTerm{
 	Router router = new Router(Split.class, "route");
 	static int i = 0;
 	int id;
-	String[] receivers_uri;
+	public Port source_port;
+	ArrayList<Port> receivers_port = new ArrayList<Port>();
+	String[] receivers;
 	
 	public Split(final String sourceUri, Class in_type,String receiversuri,Class out_type) {
 		// TODO Auto-generated constructor stub
-		super(new Port(sourceUri,in_type,order));
+		source_port = new Port(sourceUri,in_type,order);
+		addSource(source_port);
 		id=order;
-		receivers_uri = receiversuri.split(",");
-		for(int i=0; i<receivers_uri.length; i++){
-			Port port = new Port(receivers_uri[i],out_type,order);
+		receivers = receiversuri.split(",");
+		for(int i=0; i<receivers.length; i++){
+			Port port = new Port(receivers[i],out_type,order);
 			port.setTerm(this);
 			addReceiver(port);
 		}
+		receivers_port.addAll(receivers_uri);
 		System.out.println("Component "+this+" added, source: ("+internal+""+order+") to: "+receiversuri);
+		id=order;
 		order+=2;
 	}
 
@@ -41,9 +46,9 @@ public class Split extends PrimitiveTerm{
 	public Split(final String sourceUri, Class in_type, String receiversuri, Class out_type, Class method_class, String method_name,final Class routeclass, final String routemethod) {
 		// TODO Auto-generated constructor stub
 		super(new Port(sourceUri,in_type,order));
-		receivers_uri = receiversuri.split(",");
-		for(int i=0; i<receivers_uri.length; i++){
-			Port port = new Port(receivers_uri[i],out_type,order);
+		receivers = receiversuri.split(",");
+		for(int i=0; i<receivers.length; i++){
+			Port port = new Port(receivers[i],out_type,order);
 			port.setTerm(this);
 			addReceiver(port);
 		}
@@ -74,13 +79,13 @@ public class Split extends PrimitiveTerm{
 	//default routing
 	public Collection<String> route(String body){
 		Collection<String> dest = new ArrayList<String>();
-		if(i<receivers_uri.length){
-			dest.add(receivers_uri[i++]);
+		if(i<receivers.length){
+			dest.add(receivers[i++]);
 			return dest;
 		}
 		else{
 			i=0;
-			dest.add(receivers_uri[i++]);
+			dest.add(receivers[i++]);
 			return dest;
 		}
 	}
@@ -104,5 +109,15 @@ public class Split extends PrimitiveTerm{
 		}
 		System.out.println("Component "+this+" started, source: ("+internal+""+id+")");
 		super.start();
+	}
+	
+	@Override
+	public void setMessage(String uri, Exchange e) {
+		// TODO Auto-generated method stub
+		if(source_port.getUri().equals(uri)){
+			System.out.println(this);
+			for(int i=0; i<source_port.getId().size(); i++)
+				producer.send(internal+""+source_port.getId().get(i), e);
+		}
 	}
 }

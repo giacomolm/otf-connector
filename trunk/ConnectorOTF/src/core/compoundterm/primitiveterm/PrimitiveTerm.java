@@ -16,6 +16,10 @@ public abstract class PrimitiveTerm extends CompoundTerm {
 
 	protected RouteBuilder primitive_route;
 	
+	public PrimitiveTerm() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	/*public PrimitiveTerm(String source_uri){
 		this.source_uri = source_uri;
 	}*/
@@ -27,13 +31,13 @@ public abstract class PrimitiveTerm extends CompoundTerm {
 		super(source_uri,receiver_uri);
 	}
 	
-	public PrimitiveTerm(Port source_uri, Collection<Port> receivers_uri){
+	/*public PrimitiveTerm(Port source_uri, Collection<Port> receivers_uri){
 		super(source_uri,receivers_uri);
 	}
 	
 	PrimitiveTerm(Collection<Port> sources_uri, Collection<Port> receivers_uri){
 		super(sources_uri,receivers_uri);
-	}
+	}*/
 
 	public RouteBuilder getRoute() {
 		return primitive_route;
@@ -45,21 +49,22 @@ public abstract class PrimitiveTerm extends CompoundTerm {
 	
 	public void start(){
 		try {
-			for(int i=0; i<order; i++){
-				Iterator<Port> p = sources_uri.iterator();
-				while(p.hasNext()){
-					final Port temp = p.next();
-					context.addRoutes(new RouteBuilder() {
+			if(!composed){
+				for(int i=0; i<order; i++){
+					Iterator<Port> p = sources_uri.iterator();
+					while(p.hasNext()){
+						final Port temp = p.next();
+						context.addRoutes(new RouteBuilder() {
 							@Override
 							public void configure() throws Exception {
 								// TODO Auto-generated method stub
 								from(context.getEndpoint(temp.getUri())).
-								to(internal+""+temp.getId());
+								to(internal+""+temp.getId().get(0));
 							}
 						});
+					}
 				}
 			}
-			
 			context.start();
 		} 
 		catch (Exception e) {
@@ -73,5 +78,6 @@ public abstract class PrimitiveTerm extends CompoundTerm {
 	void setReceivers_uri(ArrayList<Port> receiversUri) {
 		receivers_uri = receiversUri;
 	}
+
 	
 }

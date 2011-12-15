@@ -10,10 +10,11 @@ import org.apache.camel.builder.RouteBuilder;
 import core.Port;
 
 public class Cons extends PrimitiveTerm{
-
+	Port source_port;
 	
 	public Cons(final String sourceUri, Class in_type) {
-		super(new Port(sourceUri,in_type,order),new Port());
+		source_port = new Port(sourceUri,in_type,order); 
+		addSource(source_port);
 		try {
 			context.addRoutes(new RouteBuilder() {
 				@Override
@@ -23,7 +24,7 @@ public class Cons extends PrimitiveTerm{
 					process(new Processor() {
 						@Override
 						public void process(Exchange e) throws Exception {
-							System.out.println("consumed "+e+" by "+sourceUri);
+							System.out.println("consumed "+e+" by "+this);
 						}
 					});
 				}
@@ -42,4 +43,15 @@ public class Cons extends PrimitiveTerm{
 		System.out.println("Component "+this+" started");
 		super.start();
 	}
+	
+	@Override
+	public void setMessage(String uri, Exchange e) {
+		// TODO Auto-generated method stub
+		if(source_port.getUri().equals(uri)){
+			System.out.println(this);
+			for(int i=0; i<source_port.getId().size(); i++)
+				producer.send(internal+""+source_port.getId().get(i), e);
+		}
+	}
+	
 }
