@@ -25,6 +25,7 @@ public class Third {
 		s.setRoutingLogic(Third.class, "routing");
 		CompoundTerm c = new Plug(new Plug(new Prod("vm:start",Customer.class,customer), s),new Cons("vm:endpoint2",Department.class));
 		c.start();
+		System.out.println("Split "+s.source_port.getTerms());
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {

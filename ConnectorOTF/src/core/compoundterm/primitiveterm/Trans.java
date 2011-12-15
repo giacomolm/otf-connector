@@ -11,20 +11,27 @@ public class Trans extends PrimitiveTerm{
 	Class methodclass;
 	String methodname;
 	String receiver;
+	Port receiver_port,source_port;
 	int id;
 	
 	public Trans(final String sourceUri, Class in_type, final String receiverUri, Class out_type){
-		super(new Port(sourceUri,in_type,order), new Port(receiverUri,out_type,order));
-		setReceiver(receiverUri);
+		source_port = new Port(sourceUri,in_type,order);
+		addSource(source_port);
+		receiver_port = new Port(receiverUri,out_type,order);
+		addReceiver(receiver_port);
+		//setReceiver(receiverUri);
 		System.out.println("Component "+this+" added, source: ("+internal+""+order+") to: "+receiverUri);
 		id = order;
 		order++;
 	}
 	
 	public Trans(final String sourceUri, Class in_type,final String receiverUri, Class out_type,Class method_class, String method_name){
-		super(new Port(sourceUri,in_type,order), new Port(receiverUri,out_type,order));
+		source_port = new Port(sourceUri,in_type,order);
+		addSource(source_port);
+		receiver_port = new Port(receiverUri,out_type,order);
+		addReceiver(receiver_port);
 		setTransformLogic(method_class, method_name);
-		setReceiver(receiverUri);
+		//setReceiver(receiverUri);
 		System.out.println("Component "+this+" added, source: ("+internal+""+order+") to: "+receiverUri);
 		id=order++;
 	}
@@ -43,7 +50,7 @@ public class Trans extends PrimitiveTerm{
 					// TODO Auto-generated method stub
 					from(internal+""+id).
 					transform().method(methodclass, methodname).
-					to(receiver);
+					to(receiver_port.getUri());
 				}
 			});
 			System.out.println("Component "+this+" started source"+internal+""+id);
@@ -56,5 +63,13 @@ public class Trans extends PrimitiveTerm{
 
 	public void setReceiver(String receiver) {
 		this.receiver = receiver;
+	}
+	
+	@Override
+	public void setMessage(String uri, Exchange e) {
+		// TODO Auto-generated method stub
+		if(source_port.getUri().equals(uri)){
+			producer.send(internal+""+source_port.getId().get(0), e);
+		}
 	}
 }
