@@ -51,8 +51,18 @@ public class Port {
 		return id;
 	}
 
-	/*public void setId(int id) {
-		this.id = id;
-	}*/
+	public void addId(int id) {
+		this.id.add(new Integer(id));
+	}
+	
+	public void add(Port p){
+		types.addAll(p.getType());
+		id.addAll(p.getId());
+	}
 
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Port "+getUri()+" Terms"+ getTerms();
+	}
 }

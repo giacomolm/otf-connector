@@ -19,44 +19,38 @@ public class Split extends PrimitiveTerm{
 	Class methodclass = Split.class;
 	String methodname = "split";
 	Router router = new Router(Split.class, "route");
-	static int i = 0;
-	int id;
 	public Port source_port;
 	ArrayList<Port> receivers_port = new ArrayList<Port>();
 	String[] receivers;
 	
 	public Split(final String sourceUri, Class in_type,String receiversuri,Class out_type) {
 		// TODO Auto-generated constructor stub
-		source_port = new Port(sourceUri,in_type,order);
+		source_port = new Port(sourceUri,in_type,getId());
 		addSource(source_port);
-		id=order;
 		receivers = receiversuri.split(",");
 		for(int i=0; i<receivers.length; i++){
-			Port port = new Port(receivers[i],out_type,order);
+			Port port = new Port(receivers[i],out_type,getId());
 			port.setTerm(this);
 			addReceiver(port);
 		}
 		receivers_port.addAll(receivers_uri);
 		System.out.println("Component "+this+" added, source: ("+internal+""+order+") to: "+receiversuri);
-		id=order;
-		order+=2;
 	}
 
 	
 	public Split(final String sourceUri, Class in_type, String receiversuri, Class out_type, Class method_class, String method_name,final Class routeclass, final String routemethod) {
 		// TODO Auto-generated constructor stub
-		super(new Port(sourceUri,in_type,order));
+		source_port = new Port(sourceUri,in_type,getId());
+		addSource(source_port);
 		receivers = receiversuri.split(",");
 		for(int i=0; i<receivers.length; i++){
-			Port port = new Port(receivers[i],out_type,order);
+			Port port = new Port(receivers[i],out_type,getId());
 			port.setTerm(this);
 			addReceiver(port);
 		}
 		setSplittingLogic(method_class, method_name);
 		setRoutingLogic(routeclass,routemethod);
-		System.out.println("Component "+this+" added, source: ("+internal+""+order+") to: "+receiversuri);
-		id=order;
-		order+=2;
+		System.out.println("Component "+this+" added, source: ("+internal+""+getId()+") to: "+receiversuri);
 	}	
 	
 	public void setSplittingLogic(Class method_class, String method_name){
@@ -76,29 +70,17 @@ public class Split extends PrimitiveTerm{
 		return al;
 	}
 	
-	//default routing
-	public Collection<String> route(String body){
-		Collection<String> dest = new ArrayList<String>();
-		if(i<receivers.length){
-			dest.add(receivers[i++]);
-			return dest;
-		}
-		else{
-			i=0;
-			dest.add(receivers[i++]);
-			return dest;
-		}
-	}
 	
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
+		super.start();
 		try {
 			context.addRoutes(new RouteBuilder() {
 				@Override
 				public void configure() throws Exception {
 					// TODO Auto-generated method stub
-					from(internal+""+id).
+					from(internal+""+getId()).
 					split().method(methodclass, methodname).
 					dynamicRouter(bean(router, "route"));
 				}
@@ -107,15 +89,13 @@ public class Split extends PrimitiveTerm{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Component "+this+" started, source: ("+internal+""+id+")");
-		super.start();
+		System.out.println("Component "+this+" started, source: ("+internal+""+getId()+")");
 	}
 	
 	@Override
 	public void setMessage(String uri, Exchange e) {
 		// TODO Auto-generated method stub
 		if(source_port.getUri().equals(uri)){
-			System.out.println(this);
 			for(int i=0; i<source_port.getId().size(); i++)
 				producer.send(internal+""+source_port.getId().get(i), e);
 		}

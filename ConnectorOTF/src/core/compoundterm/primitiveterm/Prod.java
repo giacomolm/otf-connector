@@ -16,17 +16,17 @@ public class Prod extends PrimitiveTerm{
 	
 	private Object message;
 	public Prod(final String receiverUri, Class type,final Object o) {
-		receiver_port = new Port(receiverUri, type, order);
+		receiver_port = new Port(receiverUri, type, getId());
 		addReceiver(receiver_port);
 		prod = context.createProducerTemplate();
 		message = o;
-		System.out.println("Component "+this+" added, to: "+getReceiver().getUri());
-		order++;
+		System.out.println("Component "+this+" added, to: "+receiverUri);
 	}
 	
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
+		super.start();
 		System.out.println("Sending message "+message+" to "+context.getEndpoint(receiver_port.getUri()));
 		producer.sendBody(context.getEndpoint(receiver_port.getUri()), message);
 	}
