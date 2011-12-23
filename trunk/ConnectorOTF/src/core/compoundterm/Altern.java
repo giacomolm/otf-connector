@@ -12,22 +12,14 @@ import core.Port;
 
 public class Altern extends CompoundTerm{
 
-	CompoundTerm c1,c2;
+	//CompoundTerm c1,c2;
 	Collection<Port> sources = new ArrayList<Port>(),receivers = new ArrayList<Port>();
 	
 	public Altern(CompoundTerm c1, CompoundTerm c2) {
-		addSources_uri(c1.getSources_uri());
-		addReceivers_uri(c1.getReceivers_uri());
-		addSources_uri(c2.getSources_uri());
-		addReceivers_uri(c2.getReceivers_uri());
 		c1.setComposed();
 		c2.setComposed();
-		/*c1.getSources_uri().clear();
-		c2.getSources_uri().clear();
-		c1.getReceivers_uri().clear();
-		c2.getReceivers_uri().clear();*/
-		this.c1 = c1;
-		this.c2 = c2;
+		addComponent(c1);
+		addComponent(c2);
 		//ci teniamo le sorgenti in quanto ci serviranno per discriminare
 		sources.addAll(sources_uri);
 		receivers.addAll(receivers_uri);
@@ -38,8 +30,10 @@ public class Altern extends CompoundTerm{
 		if(!isComposed()){
 			// Verifica qual'è il tipo in ingresso e avvia la componente desiderata
 			Iterator<Port> p = sources_uri.iterator();
+			//System.out.println("Port "+sources_uri);
 			while(p.hasNext()){
 				final Port temp = p.next();
+				System.out.println(temp.getUri());
 				try {
 					context.addRoutes(new RouteBuilder() {
 						@Override
@@ -56,6 +50,7 @@ public class Altern extends CompoundTerm{
 										Class c = i.next();
 										Object message = exchange.getIn().getBody(c);
 										if(message!=null){
+											System.out.println("start");
 											temp.getTerms().get(k).start();											
 											producer.sendBody(internal+""+temp.getId().get(k), message);	
 										}
@@ -84,7 +79,7 @@ public class Altern extends CompoundTerm{
 	@Override
 	public void setMessage(String uri, Exchange e) {
 		// TODO Auto-generated method stub
-			Iterator<Port> p = c1.getSources_uri().iterator();
+			Iterator<Port> p = component.get(0).getSources_uri().iterator();
 			while(p.hasNext()){
 				final Port temp = p.next();
 				//System.out.println("term "+temp.getTerms());
@@ -92,13 +87,14 @@ public class Altern extends CompoundTerm{
 					Class c = i.next();
 					Object message = e.getIn().getBody(c);
 					if(message!=null){
-						c1.start();
-						c1.setMessage(temp.getUri(), e);
+						component.get(0).start();
+						component.get(0).setMessage(temp.getUri(), e);
 						//producer.sendBody(internal+""+temp.getId().get(k), message);	
 					}
 				}
 			}
-			p = c2.getSources_uri().iterator();
+			//Stessa cosa per il secondo componente
+			p = component.get(1).getSources_uri().iterator();
 			while(p.hasNext()){
 				final Port temp = p.next();
 				//System.out.println("term "+temp.getTerms());
@@ -107,8 +103,8 @@ public class Altern extends CompoundTerm{
 					Class c = i.next();
 					Object message = e.getIn().getBody(c);
 					if(message!=null){
-						c2.start();
-						c2.setMessage(temp.getUri(), e);
+						component.get(1).start();
+						component.get(1).setMessage(temp.getUri(), e);
 						//producer.sendBody(internal+""+temp.getId().get(k), message);	
 					}
 				}

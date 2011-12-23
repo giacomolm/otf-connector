@@ -18,17 +18,20 @@ public abstract class CompoundTerm {
 
 	protected Collection<Port> sources_uri = new ArrayList<Port>();
 	protected Collection<Port> receivers_uri = new ArrayList<Port>();
-	//protected Collection<Endpoint> internal_endpoint = new ArrayList<Endpoint>();
 	protected CamelContext context= new DefaultCamelContext();
 	protected ProducerTemplate producer = context.createProducerTemplate();
 	protected String internal = "vm:internal";
 	protected static int order=0;
 	protected boolean composed = false;
+	protected ArrayList<CompoundTerm> component = new ArrayList<CompoundTerm>(2);
+	private int id;
 	
 	public CompoundTerm(){
+		this.id = order;
+		order++;
 	}
 	
-	public CompoundTerm(Port sourceuri){
+	/*public CompoundTerm(Port sourceuri){
 		sourceuri.setTerm(this);
 		if(!existingPort(sources_uri, sourceuri))
 			sources_uri.add(sourceuri);
@@ -58,8 +61,13 @@ public abstract class CompoundTerm {
 			if(!existingPort(sources_uri, p))
 				sources_uri.add(p);
 		}
-		receivers_uri.addAll(receiversuri);
-	}
+		for(Iterator<Port> i = receiversuri.iterator(); i.hasNext();){
+			Port p = i.next();
+			p.setTerm(this);
+			if(!existingPort(receivers_uri, p))
+				receivers_uri.add(p);
+		}
+	}*/
 
 	public Collection<Port> getSources_uri() {
 		return sources_uri;
@@ -67,21 +75,57 @@ public abstract class CompoundTerm {
 	
 	public void addSource(Port source){
 		source.setTerm(this);
-		if(!existingPort(sources_uri, source))
-			sources_uri.add(source);
+		Port temp = includePort(source,receivers_uri);
+		if(temp!=null){
+			//devo aggiungere un canale interno
+			addInternalEndpoint(source);
+			removePort(receivers_uri, source);
+		}
+		else {
+			temp =includePort(source, sources_uri);
+			if(temp!=null){
+				temp.add(source);
+			}
+			else sources_uri.add(source);
+		}
 	}
 	
 	public void addSources_uri(Collection<Port> sourcesuri){
 		for(Iterator<Port> i = sourcesuri.iterator(); i.hasNext();){
 			Port p = new Port(i.next());
 			p.setTerm(this);
-			if(!existingPort(sources_uri, p))
-				sources_uri.add(p);
+			p.addId(id);
+			Port temp = includePort(p,receivers_uri);
+			if(temp!=null){
+				//devo aggiungere un canale interno
+				addInternalEndpoint(p);
+				removePort(receivers_uri, p);
+			}
+			else {
+				temp =includePort(p, sources_uri);
+				if(temp!=null){
+					temp.add(p);
+				}
+				else sources_uri.add(p);
+			}
 		}
 	}
 
 	public void addReceiver(Port receiver){
-		receivers_uri.add(receiver);
+		receiver.setTerm(this);
+		Port temp = includePort(receiver, sources_uri);
+		if(temp!=null){
+			//devo aggiungere un canale interno
+			addInternalEndpoint(temp);
+			removePort(sources_uri, temp);
+		}
+		else {
+			temp = includePort(receiver, receivers_uri);
+			if(temp!=null){
+				temp.add(receiver);
+			}
+			else receivers_uri.add(receiver);
+		}
 	}
 	
 	public Collection<Port> getReceivers_uri() {
@@ -89,28 +133,84 @@ public abstract class CompoundTerm {
 	}
 	
 	public void addReceivers_uri(Collection<Port> receiversUri){
-		receivers_uri.addAll(receiversUri);
+		for(Iterator<Port> i = receiversUri.iterator(); i.hasNext();){
+			Port p = new Port(i.next());
+			p.setTerm(this);
+			p.addId(id);
+			Port temp = includePort(p, sources_uri);
+			if(temp!=null){
+				//devo aggiungere un canale interno
+				addInternalEndpoint(p);
+				removePort(sources_uri,p);
+			}
+			else {
+				temp = includePort(p, receivers_uri);
+				if(temp!=null){
+					temp.add(p);
+				}
+				else receivers_uri.add(p);
+			}
+		}
 	}
 	
 	
-	protected Port getSource(){
+	/*protected Port getSource(){
 		return sources_uri.iterator().next();
 	}
 	
 	protected Port getReceiver(){
 		return receivers_uri.iterator().next();
-	}
+	}*/	
 	
-	private boolean existingPort(Collection<Port> list, Port p){
+	private Port includePort(Port p, Collection<Port> list){
 		for(Iterator<Port> i = list.iterator(); i.hasNext();){
 			Port temp = i.next();
-			if(temp.getUri()!=null && temp.getUri().equals(p.getUri())){
-				//per ogni porta esistente aggiungo i termini che ne fanno uso
-				//temp.getTerms().addAll(p.getTerms());
-				return true;
+			if(temp.getUri().equals(p.getUri())){
+				return temp;
 			}
 		}
-		return false;
+		return null;
+	}
+	
+	public void addInternalEndpoint(final Port source){
+		try {
+			context.addRoutes(new RouteBuilder() {
+				@Override
+				public void configure() throws Exception {
+					// TODO Auto-generated method stub
+					for(int i=0; i<source.getId().size(); i++){
+						from(source.getUri()).
+						process(new Processor() {
+							@Override
+							public void process(Exchange m) throws Exception {
+								// TODO Auto-generated method stub
+								Collection<CompoundTerm> terms = source.getTerms();
+								for(Iterator<CompoundTerm> i = terms.iterator(); i.hasNext();){
+									CompoundTerm term = i.next();
+									term.setMessage(source.getUri(),m);
+								}
+							}
+						});
+					}
+				}
+			});
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void removePort(Collection<Port> list, Port p){
+		Port port = null;
+		boolean trovato = false;
+		Port[] ap = (Port[])list.toArray(new Port[list.size()]);
+		for(int i = 0; i<ap.length&&!trovato; i++){
+			if(ap[i].getUri().equals(p.getUri())){
+				trovato = true;
+				port = ap[i]; 
+			}
+		}
+		if(trovato) list.remove(port);
 	}
 	
 	public void start(){
@@ -150,10 +250,6 @@ public abstract class CompoundTerm {
 		}
 	}
 	
-	public int getOrder(){
-		return order;
-	}
-	
 	public boolean isComposed(){
 		return composed;
 	}
@@ -163,5 +259,23 @@ public abstract class CompoundTerm {
 	}
 	
 	public abstract void setMessage(String uri,Exchange e);
+	
+	public void addComponent(CompoundTerm c){
+		component.add(c);
+		addSources_uri(c.getSources_uri());
+		addReceivers_uri(c.getReceivers_uri());
+	}
+	
+	public ArrayList<CompoundTerm> getComponents(){
+		return component;
+	}
+	
+	public int getId(){
+		return id;
+	}
+	
+	public void setId(int id){
+		this.id = id;
+	}
 	
 }

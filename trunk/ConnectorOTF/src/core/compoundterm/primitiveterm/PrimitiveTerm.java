@@ -23,7 +23,7 @@ public abstract class PrimitiveTerm extends CompoundTerm {
 	/*public PrimitiveTerm(String source_uri){
 		this.source_uri = source_uri;
 	}*/
-	public PrimitiveTerm(Port source_uri){
+	/*public PrimitiveTerm(Port source_uri){
 		super(source_uri);
 	}
 	

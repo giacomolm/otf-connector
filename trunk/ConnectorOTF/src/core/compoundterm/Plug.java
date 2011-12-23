@@ -12,21 +12,13 @@ import core.Port;
 
 public class Plug extends CompoundTerm{
 
-	CompoundTerm c1,c2;
+	//CompoundTerm c1,c2;
 	
 	public Plug(CompoundTerm c1, CompoundTerm c2) {
-		addSources_uri(c1.getSources_uri());
-		addReceivers_uri(c1.getReceivers_uri());
-		addSources_uri(c2.getSources_uri());
-		addReceivers_uri(c2.getReceivers_uri());
 		c1.setComposed();
 		c2.setComposed();
-		/*c1.getSources_uri().clear();
-		c2.getSources_uri().clear();
-		c1.getReceivers_uri().clear();
-		c2.getReceivers_uri().clear();*/
-		this.c1 = c1;
-		this.c2 = c2;
+		addComponent(c1);
+		addComponent(c2);
 	}
 	
 	@Override
@@ -65,14 +57,13 @@ public class Plug extends CompoundTerm{
 			}
 		}
 		super.start();
-		c1.start();
-		c2.start();
+		getComponents().get(0).start();
+		getComponents().get(1).start();
 	}
 	
 	public void setMessage(String uri, Exchange e){
-		//System.out.println("C1 "+c1);
-		c1.setMessage(uri,e);
-		c2.setMessage(uri,e);
+		getComponents().get(0).setMessage(uri,e);
+		getComponents().get(1).setMessage(uri,e);
 	}
 
 }
