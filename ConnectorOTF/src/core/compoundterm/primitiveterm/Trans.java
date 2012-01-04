@@ -49,7 +49,7 @@ public class Trans extends PrimitiveTerm{
 					to(receiver_port.getUri());
 				}
 			});
-			System.out.println("Component "+this+" started source(s) "+getSources_uri()+" "+getId()+" receiver(s)"+getReceivers_uri());
+			System.out.println("Component "+this+" started source(s) "+getSources()+" "+getId()+" receiver(s)"+getReceivers());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

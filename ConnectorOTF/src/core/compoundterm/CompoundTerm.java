@@ -14,6 +14,18 @@ import org.apache.camel.impl.DefaultCamelContext;
 
 import core.Port;
 
+/**
+ * CompoundTerm is the main class of the package connector. Contains methods that permits
+ * creation and management of terms,including the import concept of message port; through this
+ * concept, this library creates links between component that share same input/output port.
+ * Each term, when it is initialised, must specify its input and output message ports: when two 
+ * terms are composed, this class deals with decide if there are common message port: if at 
+ * least one input port of a term is identically to an output port of other term, we must 
+ * create link between these two term.
+ * @author giacomolm
+ *
+ */
+
 public abstract class CompoundTerm {
 
 	protected Collection<Port> sources_uri = new ArrayList<Port>();
@@ -26,6 +38,9 @@ public abstract class CompoundTerm {
 	protected ArrayList<CompoundTerm> component = new ArrayList<CompoundTerm>(2);
 	private int id;
 	
+	/**
+	 * The constructor Initialise data structures and assigns an unique identifier at the term
+	 */
 	public CompoundTerm(){
 		this.id = order;
 		order++;
@@ -69,10 +84,19 @@ public abstract class CompoundTerm {
 		}
 	}*/
 
-	public Collection<Port> getSources_uri() {
+	/**
+	 * The method returns terms sources ports
+	 * @return Collection containing sources ports 
+	 */
+	public Collection<Port> getSources() {
 		return sources_uri;
 	}
 	
+	/**
+	 * Add source port to term. If the port is already been added to term, we must control
+	 * if we need to create a link between existing terms.
+	 * @param source Message port to include in the term
+	 */
 	public void addSource(Port source){
 		source.setTerm(this);
 		Port temp = includePort(source,receivers_uri);
@@ -90,7 +114,12 @@ public abstract class CompoundTerm {
 		}
 	}
 	
-	public void addSources_uri(Collection<Port> sourcesuri){
+	/**
+	 * This method is semantically identical to addSource, differs only by the parameter type.
+	 * Now we have a collection of port that we want to add to term.
+	 * @param sourcesuri Collection of ports
+	 */
+	public void addSources(Collection<Port> sourcesuri){
 		for(Iterator<Port> i = sourcesuri.iterator(); i.hasNext();){
 			Port p = new Port(i.next());
 			p.setTerm(this);
@@ -111,6 +140,11 @@ public abstract class CompoundTerm {
 		}
 	}
 
+	/**
+	 * Adds output port to term. Simply adds message endpoint that receives
+	 * output message from this term.
+	 * @param receiver
+	 */
 	public void addReceiver(Port receiver){
 		receiver.setTerm(this);
 		Port temp = includePort(receiver, sources_uri);
@@ -128,11 +162,20 @@ public abstract class CompoundTerm {
 		}
 	}
 	
-	public Collection<Port> getReceivers_uri() {
+	/**
+	 * Returns all receiver ports of this term
+	 * @return Collection<Port> associated with this term
+	 */
+	public Collection<Port> getReceivers() {
 		return receivers_uri;
 	}
 	
-	public void addReceivers_uri(Collection<Port> receiversUri){
+	/**
+	 * This method is semantically identical to addReceiver, differs only by the parameter type.
+	 * Now we have a collection of receiver ports that we want to add to term.
+	 * @param receiversUri Collection of port added to term
+	 */
+	public void addReceivers(Collection<Port> receiversUri){
 		for(Iterator<Port> i = receiversUri.iterator(); i.hasNext();){
 			Port p = new Port(i.next());
 			p.setTerm(this);
@@ -153,15 +196,12 @@ public abstract class CompoundTerm {
 		}
 	}
 	
-	
-	/*protected Port getSource(){
-		return sources_uri.iterator().next();
-	}
-	
-	protected Port getReceiver(){
-		return receivers_uri.iterator().next();
-	}*/	
-	
+	/**
+	 * This is an internal method that control if a port exists in a set of port
+	 * @param p port under analisys
+	 * @param list of port 
+	 * @return null if the port p is not present in the list l, else returns the Port that matches with p
+	 */
 	private Port includePort(Port p, Collection<Port> list){
 		for(Iterator<Port> i = list.iterator(); i.hasNext();){
 			Port temp = i.next();
@@ -172,8 +212,14 @@ public abstract class CompoundTerm {
 		return null;
 	}
 	
-	public void addInternalEndpoint(final Port source){
+	/**
+	 * This internal method add an internal endpoint between terms that share same messagge port.
+	 * The source port 
+	 * @param source Port 
+	 */
+	private void addInternalEndpoint(final Port source){
 		try {
+			//add new route that consumes from the uri of the source port
 			context.addRoutes(new RouteBuilder() {
 				@Override
 				public void configure() throws Exception {
@@ -200,7 +246,13 @@ public abstract class CompoundTerm {
 		}
 	}
 	
-	public void removePort(Collection<Port> list, Port p){
+	/**
+	 * Removes port p from the list passed as parameter. This method controls
+	 * if a member of the list is equal to p and remove it.
+	 * @param list of ports
+	 * @param p port to delete
+	 */
+	private void removePort(Collection<Port> list, Port p){
 		Port port = null;
 		boolean trovato = false;
 		Port[] ap = (Port[])list.toArray(new Port[list.size()]);
@@ -213,6 +265,10 @@ public abstract class CompoundTerm {
 		if(trovato) list.remove(port);
 	}
 	
+	/**
+	 * Simply recall method start() of the CamelContext class
+	 * (from Apache Camel-Core Library)
+	 */
 	public void start(){
 		try {
 			/*final Iterator<Port> p = sources_uri.iterator();
@@ -250,30 +306,56 @@ public abstract class CompoundTerm {
 		}
 	}
 	
+	/**
+	 * We control if the term is a component of compound term
+	 * @return true if this term is a component of another compound term
+	 */
 	public boolean isComposed(){
 		return composed;
 	}
 	
+	/**
+	 * Set composed this term . Useful when we are building compound term.
+	 */
 	public void setComposed(){
 		composed = true;
 	}
 	
+	/**
+	 * Add an input message to term. It allows the messagge passing betwewn
+	 * nested term: from the external term to internal(s) term(s)
+	 * @param uri source of the exchange
+	 * @param e exchange received
+	 */
 	public abstract void setMessage(String uri,Exchange e);
 	
-	public void addComponent(CompoundTerm c){
+	/**
+	 * Add term to this compound term. It is used by unary and binary
+	 * operator to add term. 
+	 * @param c Term added
+	 */
+	protected void addComponent(CompoundTerm c){
 		component.add(c);
-		addSources_uri(c.getSources_uri());
-		addReceivers_uri(c.getReceivers_uri());
+		addSources(c.getSources());
+		addReceivers(c.getReceivers());
 	}
 	
 	public ArrayList<CompoundTerm> getComponents(){
 		return component;
 	}
 	
+	/**
+	 * Each term has an unique identifier assigned in the building time
+	 * @return id of this term
+	 */
 	public int getId(){
 		return id;
 	}
 	
+	/**
+	 * Set the terms id
+	 * @param id unique identifier for this term
+	 */
 	public void setId(int id){
 		this.id = id;
 	}

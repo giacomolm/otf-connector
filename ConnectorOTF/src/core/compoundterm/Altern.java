@@ -29,7 +29,7 @@ public class Altern extends CompoundTerm{
 	public void start() {
 		if(!isComposed()){
 			// Verifica qual'è il tipo in ingresso e avvia la componente desiderata
-			Iterator<Port> p = sources_uri.iterator();
+			Iterator<Port> p = getSources().iterator();
 			//System.out.println("Port "+sources_uri);
 			while(p.hasNext()){
 				final Port temp = p.next();
@@ -79,7 +79,7 @@ public class Altern extends CompoundTerm{
 	@Override
 	public void setMessage(String uri, Exchange e) {
 		// TODO Auto-generated method stub
-			Iterator<Port> p = component.get(0).getSources_uri().iterator();
+			Iterator<Port> p = component.get(0).getSources().iterator();
 			while(p.hasNext()){
 				final Port temp = p.next();
 				//System.out.println("term "+temp.getTerms());
@@ -94,7 +94,7 @@ public class Altern extends CompoundTerm{
 				}
 			}
 			//Stessa cosa per il secondo componente
-			p = component.get(1).getSources_uri().iterator();
+			p = component.get(1).getSources().iterator();
 			while(p.hasNext()){
 				final Port temp = p.next();
 				//System.out.println("term "+temp.getTerms());
