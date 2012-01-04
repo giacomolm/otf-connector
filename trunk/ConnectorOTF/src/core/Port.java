@@ -11,37 +11,60 @@ public class Port {
 	ArrayList<CompoundTerm> terms = new ArrayList<CompoundTerm>();
 	ArrayList<Integer> id = new ArrayList<Integer>();
 	
-	public Port(){
-		
-	}
-	
+	/**
+	 * Constructs new Port from an existing port
+	 * @param p existing port  
+	 */
 	public Port(Port p){
 		uri = p.getUri();
 		types.addAll(p.getType());
 	}	
 	
+	/**
+	 * Constructs new port passing base information 
+	 * @param uri associated to this port
+	 * @param type of the object that pass through this port
+	 * @param id of the component that we are building  
+	 */
 	public Port(String uri,Class type,int id) {
 		this.uri = uri;
 		types.add(type);
 		this.id.add(Integer.valueOf(id));
 	}
 
+	/**
+	 * @return uri associated to this port
+	 */
 	public String getUri() {
 		return uri;
 	}
 
+	/**
+	 * Set uri of this port
+	 * @param uri of the port
+	 */
 	public void setUri(String uri) {
 		this.uri = uri;
 	}
 
+	/**
+	 * @return Collection of type allowed to pass through this port
+	 */
 	public ArrayList<Class> getType() {
 		return types;
 	}
 
+	/** 
+	 * @return Collection of compound term that own this port 
+	 */
 	public ArrayList<CompoundTerm> getTerms() {
 		return terms;
 	}
 
+	/**
+	 * Set term owning this port
+	 * @param term
+	 */
 	public void setTerm(CompoundTerm term) {
 		terms.clear();
 		terms.add(term);

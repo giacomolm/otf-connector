@@ -8,8 +8,8 @@ public class Invert extends CompoundTerm{
 	
 	public Invert(CompoundTerm c) {
 		// TODO Auto-generated constructor stub
-		addSources_uri(c.getReceivers_uri());
-		addReceivers_uri(c.getSources_uri());
+		addSources(c.getReceivers());
+		addReceivers(c.getSources());
 		c.isComposed();
 		term = c;
 	}
