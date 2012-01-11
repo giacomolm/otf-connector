@@ -42,6 +42,7 @@ public class Router {
 						String s = i.next();
 						result+=","+s;
 					}
+					//resitutisco gli uri destinatari per quel particolare oggetto splittato separati da una virgola
 					return result;
 				}
 						

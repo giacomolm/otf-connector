@@ -10,11 +10,28 @@ import org.apache.camel.builder.RouteBuilder;
 
 import core.Port;
 
+/**
+ * Altern class implements behaviour of alternate binary operator defined by
+ * the connector algebra theory. This class define new term composed by
+ * two component term. 
+ * Briefly, this operator behave like alternation in regular expressions: in 
+ * relation to input message, this term select the sub-term able to manage this
+ * message: once selected, term start sub term and forward the message.
+ *  
+ * @author giacomolm
+ *
+ */
+
 public class Altern extends CompoundTerm{
 
 	//CompoundTerm c1,c2;
 	Collection<Port> sources = new ArrayList<Port>(),receivers = new ArrayList<Port>();
 	
+	/**
+	 * Build new compound term which altern two component terms 
+	 * @param c1 First component term
+	 * @param c2 First component term
+	 */
 	public Altern(CompoundTerm c1, CompoundTerm c2) {
 		c1.setComposed();
 		c2.setComposed();
@@ -25,6 +42,13 @@ public class Altern extends CompoundTerm{
 		receivers.addAll(receivers_uri);
 	}
 	
+	/**
+	 * If this term is not a component of another compund term, this method publish
+	 * port adding route for each uri. For each exchange received this method control
+	 * the input type: if it is compatible with the components ports, this term decide
+	 * what term will receive the input message. This decision is based even on message
+	 * port type. 
+	 */
 	@Override
 	public void start() {
 		if(!isComposed()){
@@ -76,6 +100,13 @@ public class Altern extends CompoundTerm{
 		}
 	}
 	
+	/**
+	 * This method is used when another external term put message in this term
+	 * (this happens when this term is a component of compound term and the outer
+	 * term receive message from uri indicates by this term). This term, like in
+	 * start() method, must select the adapt sub-term which receive the input 
+	 * message.
+	 */
 	@Override
 	public void setMessage(String uri, Exchange e) {
 		// TODO Auto-generated method stub

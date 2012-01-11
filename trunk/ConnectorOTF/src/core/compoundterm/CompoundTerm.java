@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.camel.CamelContext;
-import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.ProducerTemplate;
@@ -16,7 +15,7 @@ import core.Port;
 
 /**
  * CompoundTerm is the main class of the package connector. Contains methods that permits
- * creation and management of terms,including the import concept of message port; through this
+ * creation and management of terms,including the main concept of message port; through this
  * concept, this library creates links between component that share same input/output port.
  * Each term, when it is initialised, must specify its input and output message ports: when two 
  * terms are composed, this class deals with decide if there are common message port: if at 
@@ -39,7 +38,8 @@ public abstract class CompoundTerm {
 	private int id;
 	
 	/**
-	 * The constructor Initialise data structures and assigns an unique identifier at the term
+	 * The constructor initialise data structures and assigns an unique 
+	 * identifier at the term
 	 */
 	public CompoundTerm(){
 		this.id = order;
@@ -85,8 +85,8 @@ public abstract class CompoundTerm {
 	}*/
 
 	/**
-	 * The method returns terms sources ports
-	 * @return Collection containing sources ports 
+	 * The method returns terms sources ports 
+	 * @return Collection containing sources ports of the compound term
 	 */
 	public Collection<Port> getSources() {
 		return sources_uri;
@@ -143,7 +143,7 @@ public abstract class CompoundTerm {
 	/**
 	 * Adds output port to term. Simply adds message endpoint that receives
 	 * output message from this term.
-	 * @param receiver
+	 * @param receiver Port the output exchange
 	 */
 	public void addReceiver(Port receiver){
 		receiver.setTerm(this);
@@ -340,6 +340,10 @@ public abstract class CompoundTerm {
 		addReceivers(c.getReceivers());
 	}
 	
+	/**
+	 * Get component associated to this compound term, if is composed
+	 * @return CompoundTerm components of this term
+	 */
 	public ArrayList<CompoundTerm> getComponents(){
 		return component;
 	}

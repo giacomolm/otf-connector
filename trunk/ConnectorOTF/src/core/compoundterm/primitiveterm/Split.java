@@ -14,6 +14,26 @@ import org.apache.camel.builder.RouteBuilder;
 
 import core.Port;
 
+/**
+ * Split class define behavior of Split message mismatch primitive.
+ * A component may expect to receive a message a as a sequence of fragments 
+ * of a. If message a can be decomposed into a1 , . . . , an , then the mismatch
+ * may be resolved with a primitive Split which accepts message a as input 
+ * and offers a1 , . . . , an as output in that order.
+
+ * This type of primitive includes two types of logic: splitting logic and 
+ * routing logic. With splitting logic user must define new method having as
+ * parameter the input message; body of the method processes the input message
+ * splitting it into sub-messages of the same type: this method must returns
+ * the set of sub-message under predefined type (such as a Collection).
+ * User must also set routing logic: must be defined new method deals with
+ * output message receivers; for each splitted message must be decided the 
+ * receiver. This method take as parameter the input message, and returns 
+ * a string collection of receiverUri. 
+ * 
+ * @author giacomolm
+ *
+ */
 public class Split extends PrimitiveTerm{
 
 	Class methodclass = Split.class;
@@ -23,6 +43,14 @@ public class Split extends PrimitiveTerm{
 	ArrayList<Port> receivers_port = new ArrayList<Port>();
 	String[] receivers;
 	
+	/**
+	 * Build new split term with base information. This term consumes messages from
+	 * sourceUri and can send the result of split to receivers uri
+	 * @param sourceUri Term consumes messages from this sourceUri
+	 * @param in_type Type of input message
+	 * @param receiversuri Term can send splitted message to this set of receivers
+	 * @param out_type Type of splitted messages
+	 */
 	public Split(final String sourceUri, Class in_type,String receiversuri,Class out_type) {
 		// TODO Auto-generated constructor stub
 		source_port = new Port(sourceUri,in_type,getId());
@@ -37,7 +65,18 @@ public class Split extends PrimitiveTerm{
 		System.out.println("Component "+this+" added, source: ("+internal+""+order+") to: "+receiversuri);
 	}
 
-	
+	/**
+	 * Build new split term, such the previous constructor, but now adding
+	 * information about splitting and routing logics 
+	 * @param sourceUri Term consumes messages from this sourceUri
+	 * @param in_type Type of input message
+	 * @param receiversuri Term can send splitted message to this set of receivers
+	 * @param out_type Type of splitted messages
+	 * @param method_class Class of the splitting method
+	 * @param method_name Name of splitting method
+	 * @param routeclass Class containing routing method
+	 * @param routemethod Name of routing method
+	 */
 	public Split(final String sourceUri, Class in_type, String receiversuri, Class out_type, Class method_class, String method_name,final Class routeclass, final String routemethod) {
 		// TODO Auto-generated constructor stub
 		source_port = new Port(sourceUri,in_type,getId());
@@ -53,24 +92,38 @@ public class Split extends PrimitiveTerm{
 		System.out.println("Component "+this+" added, source: ("+internal+""+getId()+") to: "+receiversuri);
 	}	
 	
+	/**
+	 * Set information about splitting logic
+	 * @param method_class Class containing splitting method 
+	 * @param method_name Name of method deals with splitting
+	 */
 	public void setSplittingLogic(Class method_class, String method_name){
 			// TODO Auto-generated constructor stub
 			methodclass = method_class;
 			methodname = method_name;
 	}
 	
+	/**
+	 * Set information about routing logic
+	 * @param routeclass Class of the routing method 
+	 * @param routeMethod Name (String) of the routing method
+	 */
 	public void setRoutingLogic(Class routeclass, String routeMethod){
 		router = new Router(routeclass,routeMethod);
 	}
 	
 	//default split che non splitta
-	public Collection<Object> split(Object body){
+	/*public Collection<Object> split(Object body){
 		ArrayList<Object> al = new ArrayList<Object>();
 		al.add(body);
 		return al;
-	}
+	}*/
 	
-	
+	/**
+	 * Starts context associated the spit term. It simply add new route: consumes
+	 * message from internal endpoint, split message based on splitting logic
+	 * and sends splitted messages to receivers uri based on routing logic. 
+	 */
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
@@ -92,6 +145,11 @@ public class Split extends PrimitiveTerm{
 		System.out.println("Component "+this+" started, source: ("+internal+""+getId()+")");
 	}
 	
+	/**
+	 * Set the Exchange e as input message of this split term. This term
+	 * check the equality between received uri and source uri: if uris are
+	 * identical, the exchange is forwarded to internal endpoint
+	 */
 	@Override
 	public void setMessage(String uri, Exchange e) {
 		// TODO Auto-generated method stub
