@@ -12,15 +12,27 @@ import org.apache.camel.builder.RouteBuilder;
 import core.Port;
 import core.compoundterm.CompoundTerm;
 
+/**
+ * Primitive Term supply an initial description of primitives introduced
+ * in the connector algebra theory. Each primitive term, Extra send,
+ * Missing send, Signature mismatch, Split message mismatch, Merge message 
+ * mismatch, Ordering mismatch are well defined with separated class which
+ * extends this class. If this primitive term is the outer term, the role 
+ * of this class is define a primitive term container which allows link 
+ * creation between this outer term and others external applications 
+ * @author giacomolm
+ *
+ */
+
 public abstract class PrimitiveTerm extends CompoundTerm {
 
 	protected RouteBuilder primitive_route;
 	
-	public PrimitiveTerm() {
+	/*public PrimitiveTerm() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	/*public PrimitiveTerm(String source_uri){
+	public PrimitiveTerm(String source_uri){
 		this.source_uri = source_uri;
 	}*/
 	/*public PrimitiveTerm(Port source_uri){
@@ -39,14 +51,19 @@ public abstract class PrimitiveTerm extends CompoundTerm {
 		super(sources_uri,receivers_uri);
 	}*/
 
-	public RouteBuilder getRoute() {
+	/*public RouteBuilder getRoute() {
 		return primitive_route;
 	}
 
 	public void setRoute(RouteBuilder primitiveroute) {
 		this.primitive_route = primitiveroute;
-	}
+	}*/
 	
+	
+	/**
+	 * Starts the context of primitive term container. Each primitive term
+	 * has a container, defined by this class, 
+	 */
 	public void start(){
 		try {
 			if(!composed){
@@ -75,9 +92,9 @@ public abstract class PrimitiveTerm extends CompoundTerm {
 	
 	//Hanno visibilità di package in quanto l'utente del sistema non deve sapere come manipoliamo i nostri receiver
 	
-	void setReceivers_uri(ArrayList<Port> receiversUri) {
+	/*void setReceivers_uri(ArrayList<Port> receiversUri) {
 		receivers_uri = receiversUri;
-	}
+	}*/
 
 	
 }
