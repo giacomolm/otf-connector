@@ -12,9 +12,15 @@ import core.Port;
  * algebra theory. This mismatch describes the case in which a component
  * expects a message a that is not sent by another component. A mismatch 
  * of this type may be resolved by introducing a producer that generates 
- * the required message. This may be modelled by a parameterised primitive
- * Prod.
-
+ * the required message. This may be modelled by a parameterised primitive Prod.
+ * Implementation of missing send primitive was made taking inspiration to 
+ * <a href="http://camel.apache.org/producertemplate.html">Producer Template</a>
+ * concept: this class "allows you to send message exchanges to endpoints in a
+ * variety of different ways to make it easy to work with Camel Endpoint 
+ * instances from Java code". 
+ * If we are in the case in which a component expects a message a that is 
+ * not sent by another component, we can easily send it through this class.
+ * 
  * @author giacomolm
  *
  */

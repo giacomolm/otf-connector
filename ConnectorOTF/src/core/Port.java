@@ -1,6 +1,8 @@
 package core;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 import core.compoundterm.CompoundTerm;
 
@@ -48,6 +50,22 @@ public class Port {
 		types.add(type);
 		this.id.add(Integer.valueOf(id));
 	}
+	
+	/**
+	 * Constructs new port passing base information 
+	 * @param uri associated to this port
+	 * @param list of type of objects passing through this port
+	 * @param id of the component that we are building  
+	 */
+	public Port(String uri,Collection<Class> types_mess,int id) {
+		this.uri = uri;
+		Iterator<Class> i = types_mess.iterator();
+		while(i.hasNext()){
+			Class type = i.next();
+			types.add(type);
+			this.id.add(Integer.valueOf(id));
+		}
+	}	
 
 	/**
 	 * Get uri associated to this port

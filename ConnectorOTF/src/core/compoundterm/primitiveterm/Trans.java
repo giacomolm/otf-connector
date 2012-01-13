@@ -12,14 +12,18 @@ import core.Port;
  * yet syntactically inconsistent. Such a mismatch may be resolved by means of 
  * a translating primitive Trans. 
  * The signature mismatch primitive is semantically identical to message 
- * translator pattern included in EIP. Apache Camel supports the Message 
- * Translator from the EIP patterns by using an arbitrary Processor in the 
- * routing logic: we simply use the DSL to 
- * User of this class defines transformation logic:
- * in the definition of trans term, user specify how input message must be 
- * translated to be compatible with receiver; hence, user must define new method
- * having as parameter the expected message and as body the manipulation of his
- * content.
+ * translator pattern included in EIP. Apache Camel supports the <a href="http://camel.apache.org/message-translator.html"> 
+ * Message Translator</a> from the EIP patterns by using an arbitrary Processor 
+ * in the routing logic: in our case, we simply use the DSL (transform() method) 
+ * into route definition. This involve that each input message is processed
+ * before to be sendend to receivers. 
+ * How can happen message transformation? 
+ * Users of this class must define transformation logic: with the definition of 
+ * trans term, user specify how input message must be translated to be compatible
+ * with receiver. This is made through the definition of a new method having as 
+ * parameter the expected message and as body the manipulation of his content.
+ * As you can see, information about this method, such as name and class 
+ * container, must be used for trans definition. 
  * @author giacomolm
  *
  */

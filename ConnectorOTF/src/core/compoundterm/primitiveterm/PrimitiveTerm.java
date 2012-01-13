@@ -76,7 +76,14 @@ public abstract class PrimitiveTerm extends CompoundTerm {
 							public void configure() throws Exception {
 								// TODO Auto-generated method stub
 								from(context.getEndpoint(temp.getUri())).
-								to(internal+""+temp.getId().get(0));
+								process(new Processor() {
+									@Override
+									public void process(Exchange e) throws Exception {
+										// TODO Auto-generated method stub
+										setMessage(temp.getUri(), e);
+									}
+								});
+								//to(internal+""+temp.getId().get(0));
 							}
 						});
 					}
