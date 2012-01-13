@@ -15,14 +15,17 @@ import org.apache.camel.builder.RouteBuilder;
 import core.Port;
 
 /**
- * Split class define behavior of Split message mismatch primitive.
+ * Split class define behavior of split message mismatch primitive.
  * A component may expect to receive a message a as a sequence of fragments 
  * of a. If message a can be decomposed into a1 , . . . , an , then the mismatch
  * may be resolved with a primitive Split which accepts message a as input 
  * and offers a1 , . . . , an as output in that order.
-
+ * Split message mismatch is semantically identically to Splitter pattern
+ * included in EIP. Apache Camel provide a direct implementation of this 
+ * pattern: we can simply use split() method into route definition.
  * This type of primitive includes two types of logic: splitting logic and 
- * routing logic. With splitting logic user must define new method having as
+ * routing logic. 
+ * With splitting logic user must define new method having as
  * parameter the input message; body of the method processes the input message
  * splitting it into sub-messages of the same type: this method must returns
  * the set of sub-message under predefined type (such as a Collection).
@@ -30,6 +33,12 @@ import core.Port;
  * output message receivers; for each splitted message must be decided the 
  * receiver. This method take as parameter the input message, and returns 
  * a string collection of receiverUri. 
+ * The routing logic is based on <a href="http://camel.apache.org/dynamic-router.html">
+ * dynamic router</a> pattern, also defined in Camel: it allows you to route messages 
+ * while avoiding the dependency of the router on all possible destinations while 
+ * maintaining its efficiency.
+ * Information about logic and routing splitting must be included with the 
+ * split definition.
  * 
  * @author giacomolm
  *
@@ -44,8 +53,8 @@ public class Split extends PrimitiveTerm{
 	String[] receivers;
 	
 	/**
-	 * Build new split term with base information. This term consumes messages from
-	 * sourceUri and can send the result of split to receivers uri
+	 * Build new split term with base information. This term consumes messages 
+	 * from sourceUri and can send the result of split to receivers uri
 	 * @param sourceUri Term consumes messages from this sourceUri
 	 * @param in_type Type of input message
 	 * @param receiversuri Term can send splitted message to this set of receivers

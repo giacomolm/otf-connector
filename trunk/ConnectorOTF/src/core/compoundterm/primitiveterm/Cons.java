@@ -14,7 +14,9 @@ import core.Port;
  * considers a component that generates a redundant message a. 
  * Such a mismatch may be resolved by introducing a consumer that swallows
  * the superfluous message. We model this by a parameterised primitive Cons.
- * Cons primitive 
+ * Apache camel provides ConsumerTemplate class that deals with consuming
+ * of Exchanges from an Endpoint: however we decided to define a dedicated
+ * route which consumes from provided endpoint, obtaining tha same behavior. 
  * @author giacomolm
  *
  */
