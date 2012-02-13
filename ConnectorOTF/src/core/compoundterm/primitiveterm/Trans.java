@@ -1,5 +1,8 @@
 package core.compoundterm.primitiveterm;
 
+import java.io.IOException;
+import java.lang.reflect.Method;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
@@ -23,7 +26,9 @@ import core.Port;
  * with receiver. This is made through the definition of a new method having as 
  * parameter the expected message and as body the manipulation of his content.
  * As you can see, information about this method, such as name and class 
- * container, must be used for trans definition. 
+ * container, must be used for trans definition.
+ * By default, transformer uses a default transform logic: it converts each input
+ * object in a String .
  * @author giacomolm
  *
  */
@@ -48,8 +53,10 @@ public class Trans extends PrimitiveTerm{
 		addSource(source_port);
 		receiver_port = new Port(receiverUri,out_type,getId());
 		addReceiver(receiver_port);
-		
-		System.out.println("Component "+this+" added, source: "+sourceUri+" to: "+receiverUri);
+		methodclass = DefaultTransformLogic.class;
+		methodname = "transform";
+		out.append("Component "+this+" added, source: "+sourceUri+" to: "+receiverUri+"\n");
+		out.flush();
 	}
 	
 	/**
@@ -68,7 +75,8 @@ public class Trans extends PrimitiveTerm{
 		receiver_port = new Port(receiverUri,out_type,getId());
 		addReceiver(receiver_port);
 		setTransformLogic(method_class, method_name);
-		System.out.println("Component "+this+" added, source: "+sourceUri+" to: "+receiverUri);
+		out.append("Component "+this+" added, source: "+sourceUri+" to: "+receiverUri+"\n");
+		out.flush();
 	}
 	
 	/**
@@ -99,7 +107,8 @@ public class Trans extends PrimitiveTerm{
 					to(receiver_port.getUri());
 				}
 			});
-			System.out.println("Component "+this+" started source(s) "+getSources()+" "+getId()+" receiver(s)"+getReceivers());
+			out.append("Component "+this+" started source(s) "+getSources()+" "+getId()+" receiver(s)"+getReceivers()+"\n");
+			out.flush();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

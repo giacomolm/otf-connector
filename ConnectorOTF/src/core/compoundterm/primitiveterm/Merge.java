@@ -1,5 +1,8 @@
 package core.compoundterm.primitiveterm;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -26,6 +29,8 @@ import core.Port;
  * which allows how creates the new (composed message). You can find more
  * information visiting this link <a href="http://camel.apache.org/aggregator.html">
  * http://camel.apache.org/aggregator.html</a>
+ * By default, merge primitive uses a default aggregation strategy: once all expected
+ * messages are received, merge sends aggregation result to receiver(s) uri. 
  *
  * @author giacomolm
  *
@@ -35,7 +40,8 @@ public class Merge extends PrimitiveTerm{
 
 	private ArrayList<Port> sources = new ArrayList<Port>();
 	private Port receiver;
-	private AggregationStrategy agg_strategy = new MyAggregationStrategy();
+	private AggregationStrategy agg_strategy = new DefaultAggregationLogic();
+	private static boolean sequence[]; 
 
 	public Merge(final String sourcesuri, Class in_type,String receiveruri,Class out_type) {
 		// TODO Auto-generated constructor stub
@@ -48,7 +54,9 @@ public class Merge extends PrimitiveTerm{
 		}
 		receiver = new Port(receiveruri, out_type, getId());
 		addReceiver(receiver);
-		System.out.println("Component "+this+" added, source: ("+internal+""+order+") to: "+sourcesuri);
+		sequence = new boolean[sources_uri.length];
+		out.append("Component "+this+" added, source: ("+internal+""+order+") to: "+sourcesuri+"\n");
+		out.flush();
 	}
 	
 	public Merge(final String sourcesuri, Class in_type,String receiveruri,Class out_type, AggregationStrategy a) {
@@ -63,7 +71,9 @@ public class Merge extends PrimitiveTerm{
 		receiver = new Port(receiveruri, out_type, getId());
 		addReceiver(receiver);
 		agg_strategy = a;
-		System.out.println("Component "+this+" added, source: ("+internal+""+order+") to: "+sourcesuri);
+		sequence = new boolean[sources_uri.length];
+		out.append("Component "+this+" added, source: ("+internal+""+order+") to: "+sourcesuri+"\n");
+		out.flush();
 	}
 	
 	@Override
@@ -78,15 +88,27 @@ public class Merge extends PrimitiveTerm{
 					from(internal+""+getId()).
 					aggregate(constant(true),agg_strategy).
 					completionSize(sources.size()).
+					process(new Processor() {
+						@Override
+						public void process(Exchange arg0) throws Exception {
+							// TODO Auto-generated method stub
+							for(int i=0; i<sequence.length; i++){
+								//dobbiamo azzerare il fatto che abbiamo ricevuto un messaggio di quel tipo
+								sequence[i]=false;
+							}
+						}
+					}).
 					to(receiver.getUri());
 					
 				}
 			});
+			out.append("Component "+this+" started, source: ("+internal+""+getId()+")\n");
+			//out.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Component "+this+" started, source: ("+internal+""+getId()+")");
+		
 	}
 
 	public void setAggregationStrategy(AggregationStrategy a){
@@ -96,11 +118,18 @@ public class Merge extends PrimitiveTerm{
 	@Override
 	public void setMessage(String uri, Exchange e) {
 		// TODO Auto-generated method stub
+		int k = 0;
 		for(Iterator<Port> i = sources.iterator(); i.hasNext();){
 			Port source  = i.next();
+			//controllo se esiste qualche porta associata al merge che sia mappata con quell'uri
 			if(source.getUri().equals(uri)){
-				producer.send(internal+""+source.getId().get(0), e);
+				//verifico se ho già nel 'buffer' un messaggio di quel tipo
+				if(!sequence[k]){
+					sequence[k]=true;
+					producer.send(internal+""+source.getId().get(0), e);
+				}
 			}
+			k++;
 		}
 	}
 }

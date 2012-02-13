@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.apache.camel.Exchange;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 
-public class MyAggregationStrategy implements AggregationStrategy {
+public class DefaultAggregationLogic implements AggregationStrategy {
 
 	public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
 		Object newBody = newExchange.getIn().getBody();

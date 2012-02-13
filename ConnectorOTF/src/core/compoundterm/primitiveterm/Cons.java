@@ -1,5 +1,9 @@
 package core.compoundterm.primitiveterm;
 
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
@@ -33,6 +37,8 @@ public class Cons extends PrimitiveTerm{
 	public Cons(final String sourceUri, Class in_type) {
 		source_port = new Port(sourceUri,in_type,getId()); 
 		addSource(source_port);
+		out.append("Component "+this+" added, source:  ("+internal+""+getId()+")");
+		out.flush();
 	}
 	
 	/**
@@ -54,17 +60,18 @@ public class Cons extends PrimitiveTerm{
 					process(new Processor() {
 						@Override
 						public void process(Exchange e) throws Exception {
-							System.out.println("consumed "+e+" by "+this);
+							out.append("consumed "+e+" by "+this+"\n");
+							out.flush();
 						}
 					});
 				}
 			});
-			System.out.println("Component "+this+" added, source:  ("+internal+""+getId()+")");
+			out.append("Component "+this+" started\n");
+			out.flush();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Component "+this+" started");
 	}
 	
 	/**

@@ -1,0 +1,1 @@
+consumed Exchange[Message: Ciao] by core.compoundterm.primitiveterm.Cons$1$1@29ac

@@ -29,8 +29,8 @@ public class Altern extends CompoundTerm{
 	
 	/**
 	 * Build new compound term which altern two component terms 
-	 * @param c1 First component term
-	 * @param c2 First component term
+	 * @param c1 First1 component term
+	 * @param c2 First1 component term
 	 */
 	public Altern(CompoundTerm c1, CompoundTerm c2) {
 		c1.setComposed();
@@ -57,8 +57,8 @@ public class Altern extends CompoundTerm{
 			//System.out.println("Port "+sources_uri);
 			while(p.hasNext()){
 				final Port temp = p.next();
-				System.out.println(temp.getUri());
 				try {
+					out.append(temp.getUri()+"\n");
 					context.addRoutes(new RouteBuilder() {
 						@Override
 						public void configure() throws Exception {
@@ -69,12 +69,12 @@ public class Altern extends CompoundTerm{
 								public void process(Exchange exchange) throws Exception {
 									// TODO Auto-generated method stub
 									int k = 0;
-									System.out.println(sources_uri);
+									out.append(sources_uri+"\n");
 									for(Iterator<Class> i = temp.getType().iterator(); i.hasNext();){
 										Class c = i.next();
 										Object message = exchange.getIn().getBody(c);
 										if(message!=null){
-											System.out.println("start");
+											out.append("start\n");
 											temp.getTerms().get(k).start();											
 											producer.sendBody(internal+""+temp.getId().get(k), message);	
 										}
@@ -92,7 +92,7 @@ public class Altern extends CompoundTerm{
 		}
 		try {
 			if(!context.getRouteDefinitions().isEmpty())
-				System.out.println(context.getRouteDefinitions());
+				out.append(context.getRouteDefinitions()+"\n");
 			context.start();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
