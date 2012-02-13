@@ -1,9 +1,9 @@
 Component core.compoundterm.primitiveterm.Split@148aa23 added, source: (vm:internal1) to: vm:endpoint1,vm:endpoint2,vm:endpoint3
 Component core.compoundterm.primitiveterm.Prod@199f91c added, to: vm:start
 Component core.compoundterm.primitiveterm.Cons@1adc30 added, source:  (vm:internal3)Route defined: [Route[[From[vm:endpoint2]] -> [process[core.compoundterm.CompoundTerm$1$1@16df84b]]]]
-Route defined: [Route[[From[vm:start]] -> [process[core.compoundterm.CompoundTerm$1$1@2f8b5a]]]]
-Sending message [LnewTest.Department;@9ff0a8 to Endpoint[vm://start]
+Route defined: [Route[[From[vm:start]] -> [process[core.compoundterm.CompoundTerm$1$1@1a0225b]]]]
+Sending message [LnewTest.Department;@199939 to Endpoint[vm://start]
 Component core.compoundterm.primitiveterm.Split@148aa23 started, source: (vm:internal0)
 Component core.compoundterm.primitiveterm.Cons@1adc30 started
-consumed Exchange[Message: newTest.Department@5c7734] by core.compoundterm.primitiveterm.Cons$1$1@15e293a
-consumed Exchange[Message: newTest.Department@df83e5] by core.compoundterm.primitiveterm.Cons$1$1@15e293a
+consumed Exchange[Message: newTest.Department@15b0e2c] by core.compoundterm.primitiveterm.Cons$1$1@c06258
+consumed Exchange[Message: newTest.Department@96212a] by core.compoundterm.primitiveterm.Cons$1$1@c06258

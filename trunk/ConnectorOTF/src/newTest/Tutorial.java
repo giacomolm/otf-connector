@@ -29,6 +29,8 @@ public class Tutorial {
 		Prod p = new Prod("mina:tcp://localhost:6881?textline=true&sync=false", newTest.Cart.class, cart);	
 		p.start();
 		
+		
+		
 		try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {

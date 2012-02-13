@@ -30,7 +30,8 @@ import core.Port;
  * information visiting this link <a href="http://camel.apache.org/aggregator.html">
  * http://camel.apache.org/aggregator.html</a>
  * By default, merge primitive uses a default aggregation strategy: once all expected
- * messages are received, merge sends aggregation result to receiver(s) uri. 
+ * messages are received, merge sends aggregation (an ArrayList<Object>) result to 
+ * receiver(s) uri. 
  *
  * @author giacomolm
  *
@@ -55,7 +56,7 @@ public class Merge extends PrimitiveTerm{
 		receiver = new Port(receiveruri, out_type, getId());
 		addReceiver(receiver);
 		sequence = new boolean[sources_uri.length];
-		out.append("Component "+this+" added, source: ("+internal+""+order+") to: "+sourcesuri+"\n");
+		out.append("Component "+this+" added, source: ("+internal+""+order+") to: "+receiveruri+"\n");
 		out.flush();
 	}
 	

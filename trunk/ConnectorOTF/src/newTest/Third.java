@@ -26,6 +26,7 @@ public class Third {
 		Split s = new Split("vm:start", Customer.class, "vm:endpoint1,vm:endpoint2,vm:endpoint3",Department.class);
 		//s.setSplittingLogic(Third.class, "splitDepartments");
 		//s.setRoutingLogic(Third.class, "routing");
+		
 		CompoundTerm c = new Plug(new Plug(new Prod("vm:start",Department[].class,a), s),new Cons("vm:endpoint2",Department.class));
 		c.start();
 		try {
