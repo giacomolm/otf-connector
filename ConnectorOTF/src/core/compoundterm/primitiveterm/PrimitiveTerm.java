@@ -66,11 +66,12 @@ public abstract class PrimitiveTerm extends CompoundTerm {
 	 */
 	public void start(){
 		try {
-			if(!composed){
-				for(int i=0; i<order; i++){
+			if(!composed){ // c'era order
+				for(int i=0; i<sources_uri.size(); i++){
 					Iterator<Port> p = sources_uri.iterator();
 					while(p.hasNext()){
 						final Port temp = p.next();
+						System.out.println(order);
 						context.addRoutes(new RouteBuilder() {
 							@Override
 							public void configure() throws Exception {

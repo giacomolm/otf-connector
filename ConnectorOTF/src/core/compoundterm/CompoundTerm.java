@@ -386,4 +386,14 @@ public abstract class CompoundTerm {
 		this.id = id;
 	}
 	
+	public void getSourcePort(){
+		Iterator<Port> i = sources_uri.iterator();
+		System.out.print("Source Uri ");
+		while(i.hasNext()){
+			Port p = i.next();
+			System.out.print(p.getUri()+" ");
+		}
+		System.out.println();
+	}
+	
 }
