@@ -1,5 +1,6 @@
 package core.compoundterm.primitiveterm;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -13,6 +14,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
 import core.Port;
+import core.exceptions.DefaultSplitLogicException;
 
 /**
  * Split class define behavior of split message mismatch primitive.
@@ -38,16 +40,19 @@ import core.Port;
  * while avoiding the dependency of the router on all possible destinations while 
  * maintaining its efficiency.
  * Information about logic and routing splitting must be included with the 
- * split definition.
+ * split definition. If these information are not defined, splitter use default
+ * behaviour for splitting and routing. Default splitter consides each input message
+ * as an array of object (Object[]). The default router send each splitted message
+ * to all destinations uris. 
  * 
  * @author giacomolm
  *
  */
 public class Split extends PrimitiveTerm{
 
-	Class methodclass = Split.class;
+	Class methodclass = DefaultSplitLogic.class;
 	String methodname = "split";
-	Router router = new Router(Split.class, "route");
+	Object router;
 	public Port source_port;
 	ArrayList<Port> receivers_port = new ArrayList<Port>();
 	String[] receivers;
@@ -71,7 +76,9 @@ public class Split extends PrimitiveTerm{
 			addReceiver(port);
 		}
 		receivers_port.addAll(receivers_uri);
-		System.out.println("Component "+this+" added, source: ("+internal+""+order+") to: "+receiversuri);
+		router = new DefaultRoutingLogic(receiversuri);
+		out.append("Component "+this+" added, source: ("+internal+""+order+") to: "+receiversuri+"\n");
+		out.flush();
 	}
 
 	/**
@@ -98,7 +105,8 @@ public class Split extends PrimitiveTerm{
 		}
 		setSplittingLogic(method_class, method_name);
 		setRoutingLogic(routeclass,routemethod);
-		System.out.println("Component "+this+" added, source: ("+internal+""+getId()+") to: "+receiversuri);
+		out.append("Component "+this+" added, source: ("+internal+""+getId()+") to: "+receiversuri+"\n");
+		out.flush();
 	}	
 	
 	/**
@@ -121,13 +129,6 @@ public class Split extends PrimitiveTerm{
 		router = new Router(routeclass,routeMethod);
 	}
 	
-	//default split che non splitta
-	/*public Collection<Object> split(Object body){
-		ArrayList<Object> al = new ArrayList<Object>();
-		al.add(body);
-		return al;
-	}*/
-	
 	/**
 	 * Starts context associated the spit term. It simply add new route: consumes
 	 * message from internal endpoint, split message based on splitting logic
@@ -142,16 +143,22 @@ public class Split extends PrimitiveTerm{
 				@Override
 				public void configure() throws Exception {
 					// TODO Auto-generated method stub
+					
 					from(internal+""+getId()).
 					split().method(methodclass, methodname).
 					dynamicRouter(bean(router, "route"));
 				}
 			});
+			out.append("Component "+this+" started, source: ("+internal+""+getId()+")\n");
+			out.flush();
+		}catch (DefaultSplitLogicException e) {
+			// TODO: handle exception
+			e.printStackTrace();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Component "+this+" started, source: ("+internal+""+getId()+")");
+		
 	}
 	
 	/**

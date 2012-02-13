@@ -15,17 +15,19 @@ import core.compoundterm.primitiveterm.Split;
 public class Third {
 	
 	public static void main(String[] args) {
-		Customer customer = new Customer(1,"Giacomo");
-		Department d1 =  new Department(1, "acquisti");
-		Department d2 =  new Department(2, "marketing");
-		customer.addDepartments(d1);
-		customer.addDepartments(d2);
+		//Customer customer = new Customer(1,"Giacomo");
+		//Department d1 =  new Department(1, "acquisti");
+		//Department d2 =  new Department(2, "marketing");
+		//customer.addDepartments(d1);
+		//customer.addDepartments(d2);
+		Department[] a = new Department[10];
+		a[0] = new Department(1, "acquisti");
+		a[1] = new Department(2, "marketing");
 		Split s = new Split("vm:start", Customer.class, "vm:endpoint1,vm:endpoint2,vm:endpoint3",Department.class);
-		s.setSplittingLogic(Third.class, "splitDepartments");
-		s.setRoutingLogic(Third.class, "routing");
-		CompoundTerm c = new Plug(new Plug(new Prod("vm:start",Customer.class,customer), s),new Cons("vm:endpoint2",Department.class));
+		//s.setSplittingLogic(Third.class, "splitDepartments");
+		//s.setRoutingLogic(Third.class, "routing");
+		CompoundTerm c = new Plug(new Plug(new Prod("vm:start",Department[].class,a), s),new Cons("vm:endpoint2",Department.class));
 		c.start();
-		System.out.println("Split "+s.source_port.getTerms());
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {

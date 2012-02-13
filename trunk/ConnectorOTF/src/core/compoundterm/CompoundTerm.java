@@ -1,5 +1,11 @@
 package core.compoundterm;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -36,6 +42,21 @@ public abstract class CompoundTerm {
 	protected boolean composed = false;
 	protected ArrayList<CompoundTerm> component = new ArrayList<CompoundTerm>(2);
 	private int id;
+	static public FileOutputStream fstream;
+	static public PrintWriter out;
+	
+	static{
+		try {
+			fstream = new FileOutputStream("log.txt");
+			fstream = new FileOutputStream("log.txt",true);
+			out = new PrintWriter(fstream);
+			
+			System.out.println("File di log "+System.getProperty("user.dir")+"/log.txt");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	/**
 	 * The constructor initialise data structures and assigns an unique 
@@ -297,8 +318,9 @@ public abstract class CompoundTerm {
 				}
 			}*/
 			if(!context.getRouteDefinitions().isEmpty())
-				System.out.println("Route defined: "+context.getRouteDefinitions());
+				out.append("Route defined: "+context.getRouteDefinitions()+"\n");
 			context.start();
+			out.flush();
 		} 
 		catch (Exception e) {
 			// TODO Auto-generated catch block

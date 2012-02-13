@@ -1,5 +1,6 @@
 package core.compoundterm.primitiveterm;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -36,6 +37,7 @@ public class Order extends PrimitiveTerm{
 	ArrayList<Port> receivers_port = new ArrayList<Port>();
 	Exchange al[];
 	int sended = 0;
+	private static boolean sequence[]; 
 
 	/**
 	 * Build new order term. Rember that the order of uri listed as first 
@@ -65,7 +67,9 @@ public class Order extends PrimitiveTerm{
 			receivers_port.add(port);
 			addReceiver(port);
 		}
-		System.out.println("Component "+this+" added");
+		sequence = new boolean[sources.length];
+		out.append("Component "+this+" added\n");
+		out.flush();
 	}
 	
 	/**
@@ -88,9 +92,13 @@ public class Order extends PrimitiveTerm{
 						@Override
 						public void process(Exchange arg0) throws Exception {
 							// TODO Auto-generated method stub
-							producer.send(receivers_port.get(sended).getUri(), arg0);
-							System.out.println("Sendend "+arg0+" to "+receivers_port.get(sended).getUri());
-							sended++;
+								producer.send(receivers_port.get(sended).getUri(), arg0);
+								out.append("Sendend "+arg0+" to "+receivers_port.get(sended).getUri()+"\n");
+								out.flush();
+								sended++;
+								for(int i=0; i<receivers_port.size(); i++){
+									sequence[i]=false;
+								}
 						}
 					});
 				}
@@ -116,7 +124,8 @@ public class Order extends PrimitiveTerm{
 		int k=0;
 		for(Iterator<Port> it = sources_port.iterator(); it.hasNext()&&!trovato;){
 			Port temp = it.next();
-			if(temp.getUri().equals(uri)){
+			if(temp.getUri().equals(uri)&&!sequence[k]){
+				sequence[k]=true;
 				for(int i=0; i<temp.getId().size(); i++){
 					trovato = true;
 					al[k]=e;

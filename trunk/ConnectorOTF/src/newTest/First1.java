@@ -11,7 +11,7 @@ import core.compoundterm.primitiveterm.Cons;
 import core.compoundterm.primitiveterm.Prod;
 import core.compoundterm.primitiveterm.Split;
 
-public class First {
+public class First1 {
 
 	public static void main(String[] args) {
 		CompoundTerm comp = new Plug(new Plug(new Prod("vm://start", String.class, "Ciao"), new Cons("vm:stop",String.class)),new Cons("vm:start",String.class));

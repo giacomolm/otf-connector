@@ -1,5 +1,6 @@
 package core.compoundterm.primitiveterm;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.camel.Exchange;
@@ -46,7 +47,8 @@ public class Prod extends PrimitiveTerm{
 		addReceiver(receiver_port);
 		prod = context.createProducerTemplate();
 		message = o;
-		System.out.println("Component "+this+" added, to: "+receiverUri);
+		out.append("Component "+this+" added, to: "+receiverUri+"\n");
+		out.flush();
 	}
 	
 	/**
@@ -56,7 +58,8 @@ public class Prod extends PrimitiveTerm{
 	public void start() {
 		// TODO Auto-generated method stub
 		super.start();
-		System.out.println("Sending message "+message+" to "+context.getEndpoint(receiver_port.getUri()));
+		out.append("Sending message "+message+" to "+context.getEndpoint(receiver_port.getUri())+"\n");
+		out.flush();
 		producer.sendBody(context.getEndpoint(receiver_port.getUri()), message);
 	}
 
