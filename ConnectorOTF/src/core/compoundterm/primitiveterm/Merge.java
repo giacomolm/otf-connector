@@ -13,6 +13,7 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 
 import core.Port;
+import core.exceptions.DefaultAggregationLogicException;
 
 /**
  * Merge class implements merge message mismatch primitive. Similar to the split
@@ -56,6 +57,12 @@ public class Merge extends PrimitiveTerm{
 		receiver = new Port(receiveruri, out_type, getId());
 		addReceiver(receiver);
 		sequence = new boolean[sources_uri.length];
+		try {
+			agg_strategy = new DefaultAggregationLogic(out_type);
+		} catch (DefaultAggregationLogicException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		out.append("Component "+this+" added, source: ("+internal+""+order+") to: "+receiveruri+"\n");
 		out.flush();
 	}

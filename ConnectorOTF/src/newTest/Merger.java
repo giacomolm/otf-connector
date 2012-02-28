@@ -1,6 +1,8 @@
 package newTest;
 
+import java.util.ArrayList;
 import java.util.Collection;
+
 
 import core.compoundterm.CompoundTerm;
 import core.compoundterm.Plug;
@@ -14,7 +16,7 @@ public class Merger {
 		CompoundTerm ct = new Plug(new Prod("vm:start1", String.class, "Ciao "),
 									new Plug(new Prod("vm:start2", String.class, "come "),
 											new Plug(new Prod("vm:start3", String.class, "stai ?"),
-													new Plug(new Merge("vm:start1,vm:start2,vm:start3", String.class, "vm:end", Collection.class),
+													new Plug(new Merge("vm:start1,vm:start2,vm:start3", String.class, "vm:end", ArrayList.class),
 															new Cons("vm:end", Collection.class)
 															)
 													)

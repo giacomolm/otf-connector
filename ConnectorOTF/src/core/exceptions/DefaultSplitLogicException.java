@@ -1,7 +1,5 @@
 package core.exceptions;
 
-import org.apache.camel.CamelException;
-
 public class DefaultSplitLogicException extends Exception{
 	
 	/**

@@ -15,11 +15,11 @@ import core.compoundterm.primitiveterm.Split;
 public class Third {
 	
 	public static void main(String[] args) {
-		//Customer customer = new Customer(1,"Giacomo");
-		//Department d1 =  new Department(1, "acquisti");
-		//Department d2 =  new Department(2, "marketing");
-		//customer.addDepartments(d1);
-		//customer.addDepartments(d2);
+		Customer customer = new Customer(1,"Giacomo");
+		Department d1 =  new Department(1, "acquisti");
+		Department d2 =  new Department(2, "marketing");
+		customer.addDepartments(d1);
+		customer.addDepartments(d2);
 		Department[] a = new Department[10];
 		a[0] = new Department(1, "acquisti");
 		a[1] = new Department(2, "marketing");
@@ -28,6 +28,7 @@ public class Third {
 		//s.setRoutingLogic(Third.class, "routing");
 		
 		CompoundTerm c = new Plug(new Plug(new Prod("vm:start",Department[].class,a), s),new Cons("vm:endpoint2",Department.class));
+		//CompoundTerm c = new Plug(new Plug(new Prod("vm:start",Customer.class,customer), s),new Cons("vm:endpoint2",Department.class));
 		c.start();
 		try {
 			Thread.sleep(5000);

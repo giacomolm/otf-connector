@@ -14,6 +14,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
 import core.Port;
+import core.exceptions.DefaultRoutingLogicException;
 import core.exceptions.DefaultSplitLogicException;
 
 /**
@@ -52,10 +53,13 @@ public class Split extends PrimitiveTerm{
 
 	Class methodclass = DefaultSplitLogic.class;
 	String methodname = "split";
-	Object router;
+	Router router;
 	public Port source_port;
 	ArrayList<Port> receivers_port = new ArrayList<Port>();
 	String[] receivers;
+	
+	Object router_class;
+	String router_name;
 	
 	/**
 	 * Build new split term with base information. This term consumes messages 
@@ -76,7 +80,14 @@ public class Split extends PrimitiveTerm{
 			addReceiver(port);
 		}
 		receivers_port.addAll(receivers_uri);
-		router = new DefaultRoutingLogic(receiversuri);
+		try {
+			router_class = new DefaultRoutingLogic(receiversuri);
+		} catch (DefaultRoutingLogicException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		router_name = "route";
+		
 		out.append("Component "+this+" added, source: ("+internal+""+order+") to: "+receiversuri+"\n");
 		out.flush();
 	}
@@ -122,11 +133,13 @@ public class Split extends PrimitiveTerm{
 	
 	/**
 	 * Set information about routing logic
-	 * @param routeclass Class of the routing method 
+	 * @param routeobj Object containing routing method 
 	 * @param routeMethod Name (String) of the routing method
 	 */
-	public void setRoutingLogic(Class routeclass, String routeMethod){
-		router = new Router(routeclass,routeMethod);
+	public void setRoutingLogic(Object routeobj, String routeMethod){
+		//router = new Router(routeclass,routeMethod);
+		router_class = routeobj;
+		router_name = routeMethod;
 	}
 	
 	/**
@@ -143,10 +156,11 @@ public class Split extends PrimitiveTerm{
 				@Override
 				public void configure() throws Exception {
 					// TODO Auto-generated method stub
+
 					
 					from(internal+""+getId()).
 					split().method(methodclass, methodname).
-					dynamicRouter(bean(router, "route"));
+					dynamicRouter(bean(router_class, router_name));
 				}
 			});
 			out.append("Component "+this+" started, source: ("+internal+""+getId()+")\n");

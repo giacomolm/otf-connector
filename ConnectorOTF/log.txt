@@ -1,9 +1,14 @@
-Component core.compoundterm.primitiveterm.Split@148aa23 added, source: (vm:internal1) to: vm:endpoint1,vm:endpoint2,vm:endpoint3
-Component core.compoundterm.primitiveterm.Prod@199f91c added, to: vm:start
-Component core.compoundterm.primitiveterm.Cons@1adc30 added, source:  (vm:internal3)Route defined: [Route[[From[vm:endpoint2]] -> [process[core.compoundterm.CompoundTerm$1$1@16df84b]]]]
-Route defined: [Route[[From[vm:start]] -> [process[core.compoundterm.CompoundTerm$1$1@1a0225b]]]]
-Sending message [LnewTest.Department;@199939 to Endpoint[vm://start]
-Component core.compoundterm.primitiveterm.Split@148aa23 started, source: (vm:internal0)
-Component core.compoundterm.primitiveterm.Cons@1adc30 started
-consumed Exchange[Message: newTest.Department@15b0e2c] by core.compoundterm.primitiveterm.Cons$1$1@c06258
-consumed Exchange[Message: newTest.Department@96212a] by core.compoundterm.primitiveterm.Cons$1$1@c06258
+Component core.compoundterm.primitiveterm.Prod@1507fb2 added, to: vm:start1
+Component core.compoundterm.primitiveterm.Prod@1efb836 added, to: vm:start2
+Component core.compoundterm.primitiveterm.Prod@126e85f added, to: vm:start3
+Component core.compoundterm.primitiveterm.Merge@148aa23 added, source: (vm:internal4) to: vm:end
+Component core.compoundterm.primitiveterm.Cons@199f91c added, source:  (vm:internal4)Route defined: [Route[[From[vm:start1]] -> [process[core.compoundterm.CompoundTerm$1$1@1adc30]]]]
+Sending message Ciao  to Endpoint[vm://start1]
+Route defined: [Route[[From[vm:start2]] -> [process[core.compoundterm.CompoundTerm$1$1@1e9c82e]]]]
+Sending message come  to Endpoint[vm://start2]
+Route defined: [Route[[From[vm:start3]] -> [process[core.compoundterm.CompoundTerm$1$1@13043d2]]]]
+Sending message stai ? to Endpoint[vm://start3]
+Route defined: [Route[[From[vm:end]] -> [process[core.compoundterm.CompoundTerm$1$1@121b59a]]]]
+Component core.compoundterm.primitiveterm.Merge@148aa23 started, source: (vm:internal3)
+Component core.compoundterm.primitiveterm.Cons@199f91c started
+consumed Exchange[Message: [Ciao , come , stai ?]] by core.compoundterm.primitiveterm.Cons$1$1@119e583
