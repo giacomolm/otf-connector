@@ -12,7 +12,7 @@ public class DefaultSplitLogic {
 			return a;
 		}
 		else {
-			throw new DefaultSplitLogicException("Default Splitting Logic not correct");	
+			throw new DefaultSplitLogicException("Default Splitting Logic cannot be applied:");	
 		}
 	}
 }
