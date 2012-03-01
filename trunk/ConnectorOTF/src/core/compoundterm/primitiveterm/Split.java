@@ -13,7 +13,6 @@ import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
 import core.Port;
-import core.example.Department;
 import core.exceptions.DefaultRoutingLogicException;
 import core.exceptions.DefaultSplitLogicException;
 
