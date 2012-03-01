@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import newTest.Department;
+import core.example.Department;
+
 
 public class ReflectionExample {
 
