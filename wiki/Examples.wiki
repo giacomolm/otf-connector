@@ -47,9 +47,10 @@ Con questa istruzione indichiamo che il metodo che si occupa di dividere i messa
 				return cart.getItems(); 
 			}
 
-Allo stesso modo dobbiamo definire una logica di routing:
+Allo stesso modo dobbiamo definire una logica di routing, questa volta però dobbiamo passare allo splitter l'oggetto che contiene il metodo che usiamo per il routing:
 
-s.setRoutingLogic(First.class, "routing");
+First f = new First();
+s.setRoutingLogic(f, "routing");
 
 L'implementazione del metodo è la seguente
 
