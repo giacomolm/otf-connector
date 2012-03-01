@@ -66,44 +66,6 @@ public abstract class CompoundTerm {
 		this.id = order;
 		order++;
 	}
-	
-	/*public CompoundTerm(Port sourceuri){
-		sourceuri.setTerm(this);
-		if(!existingPort(sources_uri, sourceuri))
-			sources_uri.add(sourceuri);
-	}
-	
-	public CompoundTerm(Port sourceuri, Port receiveruri) {
-		sourceuri.setTerm(this);
-		receiveruri.setTerm(this);
-		if(!existingPort(sources_uri, sourceuri))
-			sources_uri.add(sourceuri);
-		if(!existingPort(receivers_uri, receiveruri))
-			receivers_uri.add(receiveruri);
-		//addroute da source del compound a source del primitivo
-	}
-	
-	public CompoundTerm(Port sourceuri, Collection<Port> receiversuri) {
-		receivers_uri.addAll(receiversuri);
-		sourceuri.setTerm(this);
-		sources_uri.add(sourceuri);
-	}
-	
-	public CompoundTerm(Collection<Port> sourcesuri, Collection<Port> receiversuri) {
-		//sources_uri.addAll(sourcesuri);
-		for(Iterator<Port> i = sourcesuri.iterator(); i.hasNext();){
-			Port p = i.next();
-			p.setTerm(this);
-			if(!existingPort(sources_uri, p))
-				sources_uri.add(p);
-		}
-		for(Iterator<Port> i = receiversuri.iterator(); i.hasNext();){
-			Port p = i.next();
-			p.setTerm(this);
-			if(!existingPort(receivers_uri, p))
-				receivers_uri.add(p);
-		}
-	}*/
 
 	/**
 	 * The method returns terms sources ports 
@@ -292,31 +254,6 @@ public abstract class CompoundTerm {
 	 */
 	public void start(){
 		try {
-			/*final Iterator<Port> p = sources_uri.iterator();
-				
-			while(p.hasNext()){
-				//System.out.println(getSources_uri());
-				try {
-					context.addRoutes(new RouteBuilder() {
-							@Override
-							public void configure() throws Exception {
-								// TODO Auto-generated method stub
-								Port temp = p.next();
-								String rec = "";
-								if(temp.getUri()!=null){
-									if(temp.getId().size()>0) rec+= internal+""+temp.getId().get(0);
-									for(int k = 1; k<temp.getId().size(); k++){
-										rec+=","+internal+""+temp.getId().get(k);
-									}
-									from(context.getEndpoint(temp.getUri())).to(rec);
-								}
-							}
-					});
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}*/
 			if(!context.getRouteDefinitions().isEmpty())
 				out.append("Route defined: "+context.getRouteDefinitions()+"\n");
 			context.start();

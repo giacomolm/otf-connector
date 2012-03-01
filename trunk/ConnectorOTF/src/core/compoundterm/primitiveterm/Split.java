@@ -53,7 +53,6 @@ public class Split extends PrimitiveTerm{
 
 	Class methodclass = DefaultSplitLogic.class;
 	String methodname = "split";
-	Router router;
 	public Port source_port;
 	ArrayList<Port> receivers_port = new ArrayList<Port>();
 	String[] receivers;
@@ -137,7 +136,7 @@ public class Split extends PrimitiveTerm{
 	 * @param routeMethod Name (String) of the routing method
 	 */
 	public void setRoutingLogic(Object routeobj, String routeMethod){
-		//router = new Router(routeclass,routeMethod);
+		//router = new ReflectionExample(routeclass,routeMethod);
 		router_class = routeobj;
 		router_name = routeMethod;
 	}
