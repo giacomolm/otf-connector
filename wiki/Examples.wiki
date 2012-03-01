@@ -51,7 +51,7 @@ Allo stesso modo dobbiamo definire una logica di routing, questa volta però dob
 
 First f = new First();<br>
 
-s.setRoutingLogic(f, "routing");
+s.setRoutingLogic(f, "routing");<br><br>
 L'implementazione del metodo è la seguente
 
 		public Collection of String routing(Item i){ 
