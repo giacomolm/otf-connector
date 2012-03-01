@@ -6,13 +6,13 @@ package newTest;
  * Facciomo riferimento al seguente scenario. Abbiamo un producer che invia una stringa
  * al translator. Una volta ricevuto il messaggio, il translator modifica la stringa
  * in relazione alla propria logica di traduzione e inoltra il messaggio all'effettivo
- * destinatario. Lo scopo dell'esempio è quello di fare
+ * destinatario. Lo scopo dell'esempio è quello di capire il funzionamento del translator
+ * e come può essere applicata la logica di transformazione
  */
 
 import core.compoundterm.CompoundTerm;
 import core.compoundterm.Plug;
 import core.compoundterm.primitiveterm.Cons;
-import core.compoundterm.primitiveterm.DefaultTransformLogic;
 import core.compoundterm.primitiveterm.Prod;
 import core.compoundterm.primitiveterm.Trans;
 

@@ -1,5 +1,8 @@
 /**
- * Questo esempio fa riferimento al 
+ * Questo esempio fa riferimento all'email scambiata con il professor Tivoli del 19/12, 
+ * In questo esempio facciamo vedere come applicando l'operatore di plug, le effetive 
+ * porte che vengono riesposte all'esterno sono quelle che non sono state collegate
+ * tramite un canale interno.
  */
 
 package newTest;
@@ -19,11 +22,12 @@ public class TivoliExample {
 			t2.setTransformLogic(TivoliExample.class, "setContent");
 			CompoundTerm c = new Invert(new Plug(t1,t2));
 			c.start();
+			//Stampiamo le porte.
+			System.out.println(c.getSources()+" "+c.getReceivers());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//System.out.println(c.getSources_uri()+" "+c.getReceivers_uri());
 	}
 	
 	public String setContent(String body){
