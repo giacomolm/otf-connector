@@ -49,9 +49,9 @@ Con questa istruzione indichiamo che il metodo che si occupa di dividere i messa
 
 Allo stesso modo dobbiamo definire una logica di routing, questa volta però dobbiamo passare allo splitter l'oggetto che contiene il metodo che usiamo per il routing:
 
-First f = new First();
-s.setRoutingLogic(f, "routing");
+First f = new First();<br>
 
+s.setRoutingLogic(f, "routing");
 L'implementazione del metodo è la seguente
 
 		public Collection of String routing(Item i){ 
