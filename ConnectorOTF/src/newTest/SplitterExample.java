@@ -1,3 +1,8 @@
+/**
+ * Rappresenta lo stesso esempio del tutorial, soltanto che questa volta non usiamo
+ * cart e item ma Customer e Department.
+ */
+
 package newTest;
 
 import java.util.ArrayList;
@@ -12,7 +17,7 @@ import core.compoundterm.primitiveterm.Cons;
 import core.compoundterm.primitiveterm.Prod;
 import core.compoundterm.primitiveterm.Split;
 
-public class Third {
+public class SplitterExample {
 	
 	public static void main(String[] args) {
 		Customer customer = new Customer(1,"Giacomo");
@@ -25,7 +30,7 @@ public class Third {
 		a[1] = new Department(2, "marketing");
 		Split s = new Split("vm:start", Customer.class, "vm:endpoint1,vm:endpoint2,vm:endpoint3",Department.class);
 		//s.setSplittingLogic(Third.class, "splitDepartments");
-		//s.setRoutingLogic(Third.class, "routing");
+		
 		
 		CompoundTerm c = new Plug(new Plug(new Prod("vm:start",Department[].class,a), s),new Cons("vm:endpoint2",Department.class));
 		//CompoundTerm c = new Plug(new Plug(new Prod("vm:start",Customer.class,customer), s),new Cons("vm:endpoint2",Department.class));

@@ -7,7 +7,7 @@ import core.compoundterm.Plug;
 import core.compoundterm.primitiveterm.Order;
 import core.compoundterm.primitiveterm.Prod;
 
-public class Ordering {
+public class OrderExample {
 
 	public static void main(String[] args) {
 		
