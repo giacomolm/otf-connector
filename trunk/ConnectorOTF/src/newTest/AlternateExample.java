@@ -6,7 +6,7 @@ import core.compoundterm.Plug;
 import core.compoundterm.primitiveterm.Cons;
 import core.compoundterm.primitiveterm.Prod;
 
-public class Ualternate {
+public class AlternateExample {
 
 	public static void main(String[] args) {
 		CompoundTerm comp = /*new Altern( new Cons("vm:start",String.class),

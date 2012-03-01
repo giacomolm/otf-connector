@@ -10,7 +10,7 @@ import core.compoundterm.primitiveterm.Cons;
 import core.compoundterm.primitiveterm.Merge;
 import core.compoundterm.primitiveterm.Prod;
 
-public class Merger {
+public class MergeExample {
 
 	public static void main(String[] args) {
 		CompoundTerm ct = new Plug(new Prod("vm:start1", String.class, "Ciao "),
