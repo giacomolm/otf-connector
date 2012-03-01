@@ -12,7 +12,7 @@ public class DefaultSplitLogic {
 			return a;
 		}
 		else {
-			throw new DefaultSplitLogicException("Default Splitting Logic cannot be applied:");	
+			throw new DefaultSplitLogicException("Default Splitting Logic assume that incoming messages can be only array of object (Object[]). Other type of message cannot be splitted. In this case message received contains this:"+o);	
 		}
 	}
 }

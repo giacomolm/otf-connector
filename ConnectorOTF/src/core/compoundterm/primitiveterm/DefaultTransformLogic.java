@@ -19,7 +19,7 @@ public class DefaultTransformLogic {
 	public static Object transform(Object o) throws DefaultTransformLogicException{
 		if(o.getClass().equals(out_type))
 			return o;
-		else throw new DefaultTransformLogicException("DefaultTransformLogic cannot transform input");
+		else throw new DefaultTransformLogicException("DefaultTransformLogic cannot transform incoming message. Type expected by the receiver is "+out_type+" and is different respect "+o);
 	}
 
 }

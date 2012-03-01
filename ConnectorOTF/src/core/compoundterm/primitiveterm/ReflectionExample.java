@@ -8,7 +8,7 @@ import java.util.Iterator;
 
 import newTest.Department;
 
-public class Router {
+public class ReflectionExample {
 
 	Class methodclass;
 	String methodname;
@@ -16,7 +16,7 @@ public class Router {
 	boolean invoked=false;
 	static Object previous=null; 
 	
-	public Router(Class method_class, String method_name) {
+	public ReflectionExample(Class method_class, String method_name) {
 		// TODO Auto-generated constructor stub
 		methodclass = method_class;
 		methodname = method_name;
