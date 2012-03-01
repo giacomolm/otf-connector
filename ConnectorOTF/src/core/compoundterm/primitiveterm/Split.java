@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import newTest.Department;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
@@ -14,6 +13,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
 import core.Port;
+import core.example.Department;
 import core.exceptions.DefaultRoutingLogicException;
 import core.exceptions.DefaultSplitLogicException;
 
