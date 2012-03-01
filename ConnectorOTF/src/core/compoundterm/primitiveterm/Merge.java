@@ -43,7 +43,8 @@ public class Merge extends PrimitiveTerm{
 	private ArrayList<Port> sources = new ArrayList<Port>();
 	private Port receiver;
 	private AggregationStrategy agg_strategy = new DefaultAggregationLogic();
-	private static boolean sequence[]; 
+	private static boolean sequence[];
+	private int completition_size;
 
 	public Merge(final String sourcesuri, Class in_type,String receiveruri,Class out_type) {
 		// TODO Auto-generated constructor stub
@@ -54,6 +55,7 @@ public class Merge extends PrimitiveTerm{
 			sources.add(port);
 			addSource(port);
 		}
+		completition_size = sources.size();
 		receiver = new Port(receiveruri, out_type, getId());
 		addReceiver(receiver);
 		sequence = new boolean[sources_uri.length];
@@ -95,7 +97,7 @@ public class Merge extends PrimitiveTerm{
 					// TODO Auto-generated method stub
 					from(internal+""+getId()).
 					aggregate(constant(true),agg_strategy).
-					completionSize(sources.size()).
+					completionSize(completition_size).
 					process(new Processor() {
 						@Override
 						public void process(Exchange arg0) throws Exception {
@@ -139,5 +141,9 @@ public class Merge extends PrimitiveTerm{
 			}
 			k++;
 		}
+	}
+	
+	public void setCompletitionTime(int size){
+		this.completition_size = size;
 	}
 }
