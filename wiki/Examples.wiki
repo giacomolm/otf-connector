@@ -113,3 +113,6 @@ Adesso è possibile vedere in esecuzione il connettore. Man mano vengono restitu
 consumed Exchange[Message: Item@XXXXXX] by core.compoundterm.primitiveterm.Cons$1$1@XXXXX
 
 consumed Exchange[Message: Item@XXXXXX] by core.compoundterm.primitiveterm.Cons$1$1@XXXXX
+
+<br><br><b>Studio delle altre primitive</b><br><br>
+Dopo aver appreso il funzionamento generale della libreria, i concetti visti si applicano anche per le altre primitive. L'unica cosa che cambia tra una primitiva e l'altra è la definizione della logica inclusa nella stessa. Infatti per la creazione di un termine deve essere specificata la logica in un maniera precisa, prevista dallo stesso framework Apache Camel
