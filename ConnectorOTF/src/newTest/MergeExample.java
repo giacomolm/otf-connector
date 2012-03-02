@@ -1,5 +1,6 @@
 /**
- * In questo esempio vogliamo vedere come possiamo applicare
+ * In questo esempio vogliamo vedere come possiamo applicare. Dobbiamo
+ * implementare una strategia di aggregazione
  */
 
 package newTest;

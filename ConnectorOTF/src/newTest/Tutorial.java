@@ -141,8 +141,6 @@ public class Tutorial {
 		CompoundTerm ct = new Plug(p, new Plug(s, c));
 		ct.start();
 		
-		
-		
 		try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {

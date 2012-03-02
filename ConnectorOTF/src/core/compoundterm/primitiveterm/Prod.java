@@ -58,7 +58,7 @@ public class Prod extends PrimitiveTerm{
 	public void start() {
 		// TODO Auto-generated method stub
 		super.start();
-		out.append("Sending message "+message+" to "+context.getEndpoint(receiver_port.getUri())+"\n");
+		out.append(this+" Sending message "+message+" to "+context.getEndpoint(receiver_port.getUri())+"\n");
 		out.flush();
 		producer.sendBody(context.getEndpoint(receiver_port.getUri()), message);
 	}

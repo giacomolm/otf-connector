@@ -1,7 +1,10 @@
 package core.compoundterm.primitiveterm;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.camel.Exchange;
@@ -38,6 +41,9 @@ public class Order extends PrimitiveTerm{
 	Exchange al[];
 	int sended = 0;
 	private static boolean sequence[]; 
+	private int size;
+	Object permutation = new DefaultOrderLogic();
+	String perm_method_name = "order"; 
 
 	/**
 	 * Build new order term. Rember that the order of uri listed as first 
@@ -68,6 +74,7 @@ public class Order extends PrimitiveTerm{
 			addReceiver(port);
 		}
 		sequence = new boolean[sources.length];
+		size = receivers_port.size();
 		out.append("Component "+this+" added\n");
 		out.flush();
 	}
@@ -87,18 +94,20 @@ public class Order extends PrimitiveTerm{
 				public void configure() throws Exception {
 					// TODO Auto-generated method stub
 					from(internal+""+getId()).
-					resequence(header("seqnum")).size(receivers_port.size()).
+					//è questa prossima istruzione che fa girare sempre il programma
+					resequence(header("seqnum")).size(size).
 					process(new Processor() {
 						@Override
 						public void process(Exchange arg0) throws Exception {
 							// TODO Auto-generated method stub
-								producer.send(receivers_port.get(sended).getUri(), arg0);
-								out.append("Sendend "+arg0+" to "+receivers_port.get(sended).getUri()+"\n");
-								out.flush();
-								sended++;
-								for(int i=0; i<receivers_port.size(); i++){
-									sequence[i]=false;
-								}
+							//il get di 0 permette di assumere che abbiamo un singolo receiver
+							producer.send(receivers_port.get(0).getUri(), arg0);
+							out.append("Sendend message "+arg0+"\n");
+							out.flush();
+							/*sended++;
+							for(int i=0; i<receivers_port.size(); i++){
+								sequence[i]=false;
+							}*/
 						}
 					});
 				}
@@ -124,12 +133,37 @@ public class Order extends PrimitiveTerm{
 		int k=0;
 		for(Iterator<Port> it = sources_port.iterator(); it.hasNext()&&!trovato;){
 			Port temp = it.next();
-			if(temp.getUri().equals(uri)&&!sequence[k]){
-				sequence[k]=true;
+			/* potrei fare così.. prendo n messaggi in ingresso e poi su questa
+			 * ci applico una funzione di permutazione
+			 */
+			if(temp.getUri().equals(uri)/*&&!sequence[k]*/){
+				//sequence[k]=true;
 				for(int i=0; i<temp.getId().size(); i++){
 					trovato = true;
 					al[k]=e;
-					e.getIn().setHeader("seqnum", new Integer(k));
+					
+					//Recalling permutation function
+					Integer sequence_num = new Integer(0);
+					try {
+						Method myMethod = null;
+						Method[] m = permutation.getClass().getDeclaredMethods();
+						for(int v=0; v<m.length; v++){
+							if(m[v].getName().equals(perm_method_name)){
+								myMethod = m[v];
+							}
+						}
+						sequence_num =  (Integer) myMethod.invoke(permutation,e.getIn().getBody());
+					} catch (IllegalArgumentException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IllegalAccessException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (InvocationTargetException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					e.getIn().setHeader("seqnum", sequence_num);
 					producer.send(internal+""+temp.getId().get(i), e);
 				}
 			}
@@ -137,4 +171,12 @@ public class Order extends PrimitiveTerm{
 		}
 	}
 
+	public void setSequenceSize(int s){
+		this.size = s;
+	}
+	
+	public void setPermutation(Object o, String funct_name){
+		permutation = o;
+		perm_method_name = funct_name;
+	}
 }
