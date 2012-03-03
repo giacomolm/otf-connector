@@ -35,7 +35,15 @@ L'ultimo parametro, infine, indica la classe dell'insieme di oggetti in uscita d
 
 Una volta definite le informazioni di base del connettore, possiamo procedere con la definizione dei due concetti restanti: la logica di splitting e la logica di routing.
 
-Con logica di splitting intendiamo quale procedimento seguire per dividere il messaggio in ingresso in un insieme di messaggi compatibili con l'applicazione destinataria. Nel nostro caso  la logica di splitting fa riferimento ad una procedura che, preso in ingresso un oggetto carrello, trasmette gli item in esso presenti. Aggiungiamo nella classe First la seguente riga di codice:
+Con logica di splitting intendiamo quale procedimento seguire per dividere il messaggio in ingresso in un insieme di messaggi compatibili con l'applicazione destinataria. Nel nostro caso  la logica di splitting fa riferimento ad una procedura che, preso in ingresso un oggetto carrello, trasmette gli item in esso presenti. L'implementazione è la seguente
+
+	public List<Item> splitItem(Cart cart) {
+		return cart.getItems();
+	}
+
+Dalla definizione del metodo risciamo a capire che da un singolo oggetto in ingresso, riusciamo ad ottenere un'insieme di oggetti ad esso associati.
+
+Per effettuare una sorta di binding tra la nostra logica e la primitiva split che stiamo definendo, aggiungiamo nella classe First la seguente riga di codice:
 
 s.setSplittingLogic(First.class, "splitItem");
 
@@ -59,6 +67,8 @@ L'implementazione del metodo è la seguente
 		}
 
 Questo metodo viene invocato per ogni Item presente nel carrello (che viene inviato al metodo): nel nostro caso abbiamo deciso di inoltrare ciascun item ottenuto all'applicazione destinataria; nulla impedisce di poter effettuare delle verifiche sull'item ricevuto, in modo tale da scegliere l'applicazione o le applicazioni destinatarie.
+
+La struttura dello logica di routing, quindi la struttura del metodo routing non deve essere alterata. Questa deve sempre avere un parametro che indichi l'oggetto in transito alla componente, e deve sempre restituire una collezione di uri che rappresentano i receivers.
 
 A questo punto abbiamo terminato la costruzione del nostro connettore; non ci rimane altro che avviarlo (e lasciarlo in esecuzione per un po' di secondi). 
 
