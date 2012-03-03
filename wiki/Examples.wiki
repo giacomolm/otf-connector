@@ -37,7 +37,7 @@ Una volta definite le informazioni di base del connettore, possiamo procedere co
 
 Con logica di splitting intendiamo quale procedimento seguire per dividere il messaggio in ingresso in un insieme di messaggi compatibili con l'applicazione destinataria. Nel nostro caso  la logica di splitting fa riferimento ad una procedura che, preso in ingresso un oggetto carrello, trasmette gli item in esso presenti. L'implementazione è la seguente
 
-	public List<Item> splitItem(Cart cart) {
+	public List of Item splitItem(Cart cart) {
 		return cart.getItems();
 	}
 
@@ -47,11 +47,7 @@ Per effettuare una sorta di binding tra la nostra logica e la primitiva split ch
 
 s.setSplittingLogic(First.class, "splitItem");
 
-Con questa istruzione indichiamo che il metodo che si occupa di dividere i messaggi in ingresso è presente nella classe First (la stessa del connettore), e si chiama “splitItem”. Qui di seguito abbiamo l'implementazione del metodo (utilizziamo of al posto delle parentesi angolari per problemi di formattazione):
-
-			public List of Item splitItem(Cart cart) { 
-				return cart.getItems(); 
-			}
+Con questa istruzione indichiamo che il metodo che si occupa di dividere i messaggi in ingresso è presente nella classe First (la stessa del connettore), e si chiama “splitItem”. 
 
 Allo stesso modo dobbiamo definire una logica di routing, questa volta però dobbiamo passare allo splitter l'oggetto che contiene il metodo che usiamo per il routing:
 
@@ -155,7 +151,7 @@ La definizione di una propria logica di aggregazione comporta la definizione di 
 
 public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
 		Object newBody = newExchange.getIn().getBody();
-		ArrayList<Object> list = null;
+		ArrayList of Object list = null;
 		//first time we do aggregation
 	    if (oldExchange == null) {
 			list = new ArrayList<Object>();
