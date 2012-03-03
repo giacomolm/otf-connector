@@ -17,9 +17,7 @@ La soluzione suggerita dalla teoria dei connettori  è di interporre un connetto
 Il connettore è un semplice componente che coincide o ad una semplice primitiva, che permette di risolvere delle incorrispondenze di base, o a dalla composizione di più primitive: in questo ultimo modo possiamo risolvere delle incompatibilità anche più complesse, con il rispetto della semantica degli operatori proposti.
 La teoria dei connettori dispone di una semplice primitiva che fa proprio al nostro caso: split message mismatch. Questa primitiva permette di dividere un messaggio, in arrivo dall'applicazione mittente, in un insieme di 'sottomessaggi', compatibili con l'applicazione destinataria.
 
-Vediamo ora come procedere con l'implementazione pratica di un semplice connettore tramite l'utilizzo della libreria creata.
-
-In allegato al documento trovate tutte le librerie (inclusa quella di camel) utilizzate per rendere operativo questo semplice connettore.
+Vediamo ora come procedere con l'implementazione pratica di un semplice connettore tramite l'utilizzo della libreria creata. L'esempio che stiamo per vedere fa riferimento alla classe SplitterExample presente nel package newTest della libreria
 
 Come primo passo creiamo un nuovo progetto. Entriamo nella configurazione del build path e aggiungiamo le 5 librerie presenti nell'archivio allegato: quattro di queste sono richieste per il funzionamento di base del framework apache camel (http://camel.apache.org/what-are-the-dependencies.html), mentre una di queste è proprio la nostra libreria (CABAC.jar). Inoltre, considerando lo scenario precedentemente mostrato, disponiamo di due classi, Cart e Item, che modellano i concetti rispettivamente di Carrello e di Articolo (entrambe presenti nell'archivio allegato). 
 Siamo ora pronti per scrivere il nostro primo connettore:  chiameremo questa classe First.
