@@ -1,4 +1,3 @@
-
 #summary This page shows some examples on the usage of the different primitive terms.
 
 = Introduction =
@@ -43,13 +42,13 @@ CompoundTerm ct = new Plug(p, new Plug(s,c));
 </code>
 Avviamo il nuovo connettore, lasciandolo in esecuzione per 5 secondi: 		
 <code>
-		ct.start(); 
-		try { 
-			Thread.sleep(5000); 
-		} catch (InterruptedException e) { 
-			// TODO Auto-generated catch block 
-			e.printStackTrace(); 
-		}
+	ct.start(); 
+	try { 
+		Thread.sleep(5000); 
+	} catch (InterruptedException e) { 
+		// TODO Auto-generated catch block 
+		e.printStackTrace(); 
+	}
 </code>
 Adesso è possibile vedere in esecuzione il connettore. Man mano vengono restituiti messaggi che mostrano il comportamento atteso. Ciò puà essere constato da questi due ultimi messaggi sulla console, scritti dal consumer
 <code>
@@ -89,30 +88,30 @@ Nel caso del Merge possiamo definire una nostra logica di aggregazioe, che nel c
 La definizione di una propria logica di aggregazione comporta la definizione di una nuova classe che implementi AggregationStrategy, presente nella libreria camel-coreX.X, e che contenga la definizione del metodo aggregate. Riceve in ingresso due parametri tipo exchange e restituisce un'oggetto di tipo Exchange. Di seguito abbiamo un esempio, nel quale aggreghiamo tutti gli oggetti che stiamo ricevendo. Infatti il secondo parametro fa riferimento ad un messaggio appena ricevuto, mentre il primo rappresenta l'aggregazione che stiamo conservando. Questa rappresenta la strategia di aggregazione di default:
 <code>
 public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
-		Object newBody = newExchange.getIn().getBody();
-		ArrayList of Object list = null;
-		//first time we do aggregation
-	    if (oldExchange == null) {
-			list = new ArrayList<Object>();
-			list.add(newBody);
-			newExchange.getIn().setBody(list);
-			return newExchange;
-	    } 
-	    else{
-		    list = oldExchange.getIn().getBody(ArrayList.class);
-			list.add(newBody);
-			return oldExchange;
-	    }
+	Object newBody = newExchange.getIn().getBody();
+	ArrayList of Object list = null;
+	//first time we do aggregation
+	if (oldExchange == null) {
+		list = new ArrayList<Object>();
+		list.add(newBody);
+		newExchange.getIn().setBody(list);
+		return newExchange;
+	} 
+	else{
+	        list = oldExchange.getIn().getBody(ArrayList.class);
+		list.add(newBody);
+		return oldExchange;
+	}
     }</code>
 <br>
 <b>Order</b><br>
 L'utilizzo della primitiva order può includere la definizione di una propria permutazione.Cerchiamo di capire come possiamo definire la nostra funzione di permutazione.  Facendo riferimento all'esempio OrderExample, possiamo vedere che abbiamo un endpoint sorgente che invia tre Stringhe: "Ciao", "come", "Stai". Le sorgenti sono impostate in modo tale che questi messaggi non arrivano in ordine: cioè il connettore potrebbe ricevere ad esempio le tre stringhe in questa sequenza "stai?" "ciao" e "Come". La primitiva order permette di procedere con il riordinamento di questi messaggi, tramite la funzione di permutazione.
 Questa funzione prende in ingresso il messaggio in arrivo alla componente e restituisce un Integer che ne indica la sua posizione nella sequenza. Ad esempio, nel nostro caso, la sequenza è la seguente: "Ciao"->1, "come"->2, "stai?"->3. La funzione viene così definita:	
 <code>
-public Integer myPermutation(String s){<br>
-		if(s.equals(" stai ?")) return new Integer(2);<br>
-		if(s.equals(" come ")) return new Integer(1);<br>
-		if(s.equals(" ciao ")) return new Integer(0);<br>
+public Integer myPermutation(String s){
+		if(s.equals(" stai ?")) return new Integer(2);
+		if(s.equals(" come ")) return new Integer(1);
+		if(s.equals(" ciao ")) return new Integer(0);
 		return -1;<br>
 	} 
 </code>
