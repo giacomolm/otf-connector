@@ -7,7 +7,7 @@ For each primitive, and for two compound term, we show some example of use.
 
 = List of example =
 
-<b>Introduction to the library CABAC: Split Example with Plug application (in Italian)</b>
+<b>Introduction to the CABAC library: Split Example with Plug application (in Italian)</b>
 
 L'esempio che proponiamo qui di seguito fa riferimento al seguente scenario.
 Supponiamo di avere due applicazioni che hanno a che fare con concetti come carrello (cart) e articolo (item) inseribili nel carrello; una delle due applicazioni riesce a manipolare solo i carrelli mentre l'altra è in grado di gestire unicamente gli oggetti inseribili nel carrello. 
