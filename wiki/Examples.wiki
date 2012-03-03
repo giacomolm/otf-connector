@@ -115,4 +115,22 @@ consumed Exchange[Message: Item@XXXXXX] by core.compoundterm.primitiveterm.Cons$
 consumed Exchange[Message: Item@XXXXXX] by core.compoundterm.primitiveterm.Cons$1$1@XXXXX
 
 <br><br><b>Studio delle altre primitive</b><br><br>
-Dopo aver appreso il funzionamento generale della libreria, i concetti visti si applicano anche per le altre primitive. L'unica cosa che cambia tra una primitiva e l'altra è la definizione della logica inclusa nella stessa. Infatti per la creazione di un termine deve essere specificata la logica in un maniera precisa, prevista dallo stesso framework Apache Camel
+Dopo aver appreso il funzionamento generale della libreria, i concetti visti si applicano anche per le altre primitive. L'unica cosa che cambia tra una primitiva e l'altra è la definizione della sua logica. Come abbiamo appena visto, uno splitter ha una logica di splitting e una logica di routing; per il merge, ad esempio, possiamo definire una nostra logica di aggregazione, do sostituire a quella di default. La definizione della logica devo seguire determinate regole: per ciascuna primitiva vedremo come possiamo integrare la nostra logica.
+
+<b>Transformer</b>
+<br>
+Facciamo riferimento all'esempio TranslatorExample presente nel package newTest della libreria.
+
+La logica di traduzione è un semplice metodo che prende in ingresso
+l'oggetto in arrivo al translator e provvede alla sua modifica.
+In questo caso sappiamo che i messaggi in arrivo al nostro connettore
+sono delle stringhe: infatti nel metodo abbiamo un parametro di 
+tipo stringa. Ogni volta che abbiamo un messaggio in ingresso verrà
+chiamato il seguente metodo che provvederà alle opportune modifiche
+per adeguare la comunicazione. Naturalmente il tipo di ritorno del 
+metodo dovrà essere coerento con quanto desiderato dal ricevente
+
+	public String setContent(String body){
+                //nel nostro caso aggiungiamo la stringa camel a quella ricevuta
+		return body+" Cameled";
+	}
