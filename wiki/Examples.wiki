@@ -134,10 +134,10 @@ chiamato il seguente metodo che provvederà alle opportune modifiche
 per adeguare la comunicazione. Naturalmente il tipo di ritorno del 
 metodo dovrà essere coerento con quanto desiderato dal ricevente
 <code>
-        public String setContent(String body){
-                //nel nostro caso aggiungiamo la stringa camel a quella ricevuta
-                return body+" Cameled";
-        }</code>
+public String setContent(String body){
+       //nel nostro caso aggiungiamo la stringa camel a quella ricevuta
+       return body+" Cameled";
+}</code>
 <br>
 <b>Splitter</b>
 <br>
@@ -170,11 +170,11 @@ public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
 L'utilizzo della primitiva order può includere la definizione di una propria permutazione.Cerchiamo di capire come possiamo definire la nostra funzione di permutazione.  Facendo riferimento all'esempio OrderExample, possiamo vedere che abbiamo un endpoint sorgente che invia tre Stringhe: "Ciao", "come", "Stai". Le sorgenti sono impostate in modo tale che questi messaggi non arrivano in ordine: cioè il connettore potrebbe ricevere ad esempio le tre stringhe in questa sequenza "stai?" "ciao" e "Come". La primitiva order permette di procedere con il riordinamento di questi messaggi, tramite la funzione di permutazione.
 Questa funzione prende in ingresso il messaggio in arrivo alla componente e restituisce un Integer che ne indica la sua posizione nella sequenza. Ad esempio, nel nostro caso, la sequenza è la seguente: "Ciao"->1, "come"->2, "stai?"->3. La funzione viene così definita:    
 <code>
-public Integer myPermutation(String s){<br>
-                if(s.equals(" stai ?")) return new Integer(2);<br>
-                if(s.equals(" come ")) return new Integer(1);<br>
-                if(s.equals(" ciao ")) return new Integer(0);<br>
-                return -1;<br>
+public Integer myPermutation(String s){
+                if(s.equals(" stai ?")) return new Integer(2);
+                if(s.equals(" come ")) return new Integer(1);
+                if(s.equals(" ciao ")) return new Integer(0);
+                return -1;
         } 
 </code>
 Una volta ricevuti questi tre messaggi, la primitiva provvede all'ordinamento e all'inoltro dei messaggi nella corretta sequenza.
