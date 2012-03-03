@@ -26,8 +26,8 @@ Abbiamo già detto che il nostro connettore sarà unicamente composto da una pri
 La definizione di uno splitter richiede una serie di passi ben articolati. 
 Inizialmente definiamo le informazioni di base del nostro oggetto splitter:
 <code>
-Split s = new Split("vm:source", Cart.class, "vm:receiver",Department.class);</code>
-
+Split s = new Split("vm:source", Cart.class, "vm:receiver",Department.class);
+</code>
 Il primo parametro indica l'uri associato all'endpoint sorgente: in altri termini la stringa racchusa tra gli apici (URI) identifica un'applicazione; permette al connettore di ricevere i messaggi proveniente da quell'applicazione.
 Il secondo parametro indica la classe dell'oggetto in ingresso. L'indicazione della classe permette al connettore di discriminare diverse situazioni.
 Il terzo parametro contiene un insieme di URI, separati da una virgola se sono più di uno, che indicano alla primitiva Split quali saranno i potenziali destinatari della comunicazione. Nel nostro caso comunichiamo l'intenzione di inviare il risultato dello splitting ad una sola applicazione.
@@ -36,13 +36,10 @@ L'ultimo parametro, infine, indica la classe dell'insieme di oggetti in uscita d
 Una volta definite le informazioni di base del connettore, possiamo procedere con la definizione dei due concetti restanti: la logica di splitting e la logica di routing.
 
 Con logica di splitting intendiamo quale procedimento seguire per dividere il messaggio in ingresso in un insieme di messaggi compatibili con l'applicazione destinataria. Nel nostro caso  la logica di splitting fa riferimento ad una procedura che, preso in ingresso un oggetto carrello, trasmette gli item in esso presenti. L'implementazione è la seguente
-
-La definizione di uno splitter richiede una serie di passi ben articolati. 
-Inizialmente definiamo le informazioni di base del nostro oggetto splitter:
 <code>
-	public List of Item splitItem(Cart cart) {
-		return cart.getItems();
-	}
+public List of Item splitItem(Cart cart) {
+        return cart.getItems();
+}
 </code>
 Dalla definizione del metodo risciamo a capire che da un singolo oggetto in ingresso, riusciamo ad ottenere un'insieme di oggetti ad esso associati.
 
@@ -53,6 +50,74 @@ s.setSplittingLogic(First.class, "splitItem");
 Con questa istruzione indichiamo che il metodo che si occupa di dividere i messaggi in ingresso è presente nella classe First (la stessa del connettore), e si chiama “splitItem”. 
 
 Allo stesso modo dobbiamo definire una logica di routing, questa volta però dobbiamo passare allo splitter l'oggetto che contiene il metodo che usiamo per il routing:
+<code>
+First f = new First();
+
+s.setRoutingLogic(f, "routing");</code>
+L'implementazione del metodo è la seguente
+<code>
+public Collection of String routing(Item i){ 
+     Collectionof String receivers = new ArrayList of String(); 
+     receivers.add("vm:receiver");
+     return receivers;
+}
+</code>
+Questo metodo viene invocato per ogni Item presente nel carrello (che viene inviato al metodo): nel nostro caso abbiamo deciso di inoltrare ciascun item ottenuto all'applicazione destinataria; nulla impedisce di poter effettuare delle verifiche sull'item ricevuto, in modo tale da scegliere l'applicazione o le applicazioni destinatarie.
+
+La struttura dello logica di routing, quindi la struttura del metodo routing non deve essere alterata. Questa deve sempre avere un parametro che indichi l'oggetto in transito alla componente, e deve sempre restituire una collezione di uri che rappresentano i receivers.
+
+A questo punto abbiamo terminato la costruzione del nostro connettore; non ci rimane altro che avviarlo (e lasciarlo in esecuzione per un po' di secondi). 
+<code>
+s.start(); 
+try { 
+      Thread.sleep(5000); 
+} catch (InterruptedException e) { 
+      // TODO Auto-generated catch block 
+      e.printStackTrace(); 
+}</code>
+
+Proviamo ad avviare la nostra applicazione. Cosa accade? 
+Dato che non abbiamo nessun applicazione che produce dei messaggi (per quella source uri) , sarà un po' difficile vede in azione il connettore.
+
+Per vedere in azione il connettore, simuliamo le due applicazioni  all'interno del nostro connettore. La simulazione può avvenire tramite due primitive introdotte nell'algebra dei connettori, missing send e extra send: nell'implementazione queste due primitive vengono chiamate Prod e Cons, perchè modellano il comportamento rispettivamente di un produttore e di un consumatore. 
+In questo modo nel connettore compaiono altri due termini: il primo invia un oggetto cart e l'altro riceve un insieme di item. 
+
+Cogliamo questa occasione per introdurre l'operatore di composizione Plug, che ci permette, insieme ad altri operatori, di poter creare connettori composti.
+
+Naturalmente tutto funzione anche avviando singolarmente le componenti create.
+
+Procediamo con la creazione del producer:
+<code>
+Prod p = new Prod("vm:source", Cart.class, cart);</code>
+
+Il primo parametro indica l'uri associato all'endpoint destinatario del messaggio. Il secondo parametro invece fa riferimento alla classe dell'oggetto inviato a quell'uri, mentre l'ultimo parametro è un'istanza della Cart.
+
+Definiamo adesso il consumer:
+<code>
+Cons c = new Cons("vm:receiver", Item.class);
+</code>
+Il primo parametro permette al consumatore definito di prelevare i messaggi destinati a quell'uri; il secondo parametro indica il tipo dell'oggetto in ingresso.
+
+Applichiamo adesso l'operatore di composizione plug: i risultato dell'applicazione sarà un nuovo termine, non più primitivo, ma composto:
+<code>
+CompoundTerm ct = new Plug(p, new Plug(s,c));
+</code>
+Avviamo il nuovo connettore, lasciandolo in esecuzione per 5 secondi:           
+<code>
+ct.start(); 
+try { 
+        Thread.sleep(5000); 
+} catch (InterruptedException e) { 
+        // TODO Auto-generated catch block 
+        e.printStackTrace(); 
+}
+</code>
+Adesso è possibile vedere in esecuzione il connettore. Man mano vengono restituiti messaggi che mostrano il comportamento atteso. Ciò puà essere constato da questi due ultimi messaggi sulla console, scritti dal consumer
+
+<code>consumed Exchange[Message: Item@XXXXXX] by core.compoundterm.primitiveterm.Cons$1$1@XXXXX
+
+consumed Exchange[Message: Item@XXXXXX] by core.compoundterm.primitiveterm.Cons$1$1@XXXXX</code>
+
 <br><br><b>Studio delle altre primitive</b><br><br>
 Dopo aver appreso il funzionamento generale della libreria, i concetti visti si applicano anche per le altre primitive. L'unica cosa che cambia tra una primitiva e l'altra è la definizione della sua logica. Come abbiamo appena visto, uno splitter ha una logica di splitting e una logica di routing; per il merge, ad esempio, possiamo definire una nostra logica di aggregazione, do sostituire a quella di default. La definizione della logica deve seguire però determinate regole. Quello che faremo qui di seguito sarà capire come interagire con le varie primitive
 
@@ -69,10 +134,10 @@ chiamato il seguente metodo che provvederà alle opportune modifiche
 per adeguare la comunicazione. Naturalmente il tipo di ritorno del 
 metodo dovrà essere coerento con quanto desiderato dal ricevente
 <code>
-	public String setContent(String body){
+        public String setContent(String body){
                 //nel nostro caso aggiungiamo la stringa camel a quella ricevuta
-		return body+" Cameled";
-	}</code>
+                return body+" Cameled";
+        }</code>
 <br>
 <b>Splitter</b>
 <br>
@@ -85,31 +150,31 @@ Nel caso del Merge possiamo definire una nostra logica di aggregazioe, che nel c
 La definizione di una propria logica di aggregazione comporta la definizione di una nuova classe che implementi AggregationStrategy, presente nella libreria camel-coreX.X, e che contenga la definizione del metodo aggregate. Riceve in ingresso due parametri tipo exchange e restituisce un'oggetto di tipo Exchange. Di seguito abbiamo un esempio, nel quale aggreghiamo tutti gli oggetti che stiamo ricevendo. Infatti il secondo parametro fa riferimento ad un messaggio appena ricevuto, mentre il primo rappresenta l'aggregazione che stiamo conservando. Questa rappresenta la strategia di aggregazione di default:
 <code>
 public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
-	Object newBody = newExchange.getIn().getBody();
-	ArrayList of Object list = null;
-	//first time we do aggregation
-	if (oldExchange == null) {
-		list = new ArrayList<Object>();
-		list.add(newBody);
-		newExchange.getIn().setBody(list);
-		return newExchange;
-	} 
-	else{
-	        list = oldExchange.getIn().getBody(ArrayList.class);
-		list.add(newBody);
-		return oldExchange;
-	}
-    }</code>
+       Object newBody = newExchange.getIn().getBody();
+       ArrayList of Object list = null;
+       //first time we do aggregation
+       if (oldExchange == null) {
+              list = new ArrayList<Object>();
+              list.add(newBody);
+              newExchange.getIn().setBody(list);
+              return newExchange;
+       } 
+       else{
+              list = oldExchange.getIn().getBody(ArrayList.class);
+              list.add(newBody);
+              return oldExchange;
+       }
+}</code>
 <br>
 <b>Order</b><br>
 L'utilizzo della primitiva order può includere la definizione di una propria permutazione.Cerchiamo di capire come possiamo definire la nostra funzione di permutazione.  Facendo riferimento all'esempio OrderExample, possiamo vedere che abbiamo un endpoint sorgente che invia tre Stringhe: "Ciao", "come", "Stai". Le sorgenti sono impostate in modo tale che questi messaggi non arrivano in ordine: cioè il connettore potrebbe ricevere ad esempio le tre stringhe in questa sequenza "stai?" "ciao" e "Come". La primitiva order permette di procedere con il riordinamento di questi messaggi, tramite la funzione di permutazione.
-Questa funzione prende in ingresso il messaggio in arrivo alla componente e restituisce un Integer che ne indica la sua posizione nella sequenza. Ad esempio, nel nostro caso, la sequenza è la seguente: "Ciao"->1, "come"->2, "stai?"->3. La funzione viene così definita:	
+Questa funzione prende in ingresso il messaggio in arrivo alla componente e restituisce un Integer che ne indica la sua posizione nella sequenza. Ad esempio, nel nostro caso, la sequenza è la seguente: "Ciao"->1, "come"->2, "stai?"->3. La funzione viene così definita:    
 <code>
-public Integer myPermutation(String s){
-		if(s.equals(" stai ?")) return new Integer(2);
-		if(s.equals(" come ")) return new Integer(1);
-		if(s.equals(" ciao ")) return new Integer(0);
-		return -1;<br>
-	} 
+public Integer myPermutation(String s){<br>
+                if(s.equals(" stai ?")) return new Integer(2);<br>
+                if(s.equals(" come ")) return new Integer(1);<br>
+                if(s.equals(" ciao ")) return new Integer(0);<br>
+                return -1;<br>
+        } 
 </code>
 Una volta ricevuti questi tre messaggi, la primitiva provvede all'ordinamento e all'inoltro dei messaggi nella corretta sequenza.
