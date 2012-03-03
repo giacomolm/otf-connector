@@ -26,36 +26,33 @@ Abbiamo già detto che il nostro connettore sarà unicamente composto da una pri
 La definizione di uno splitter richiede una serie di passi ben articolati. 
 Inizialmente definiamo le informazioni di base del nostro oggetto splitter:
 <code>
-Prod p = new Prod("vm:source", Cart.class, cart);
-</code>
-Il primo parametro indica l'uri associato all'endpoint destinatario del messaggio. Il secondo parametro invece fa riferimento alla classe dell'oggetto inviato a quell'uri, mentre l'ultimo parametro è un'istanza della Cart.
+Split s = new Split("vm:source", Cart.class, "vm:receiver",Department.class);</code>
 
-Definiamo adesso il consumer:
-<code>
-Cons c = new Cons("vm:receiver", Item.class);
-</code>
-Il primo parametro permette al consumatore definito di prelevare i messaggi destinati a quell'uri; il secondo parametro indica il tipo dell'oggetto in ingresso.
+Il primo parametro indica l'uri associato all'endpoint sorgente: in altri termini la stringa racchusa tra gli apici (URI) identifica un'applicazione; permette al connettore di ricevere i messaggi proveniente da quell'applicazione.
+Il secondo parametro indica la classe dell'oggetto in ingresso. L'indicazione della classe permette al connettore di discriminare diverse situazioni.
+Il terzo parametro contiene un insieme di URI, separati da una virgola se sono più di uno, che indicano alla primitiva Split quali saranno i potenziali destinatari della comunicazione. Nel nostro caso comunichiamo l'intenzione di inviare il risultato dello splitting ad una sola applicazione.
+L'ultimo parametro, infine, indica la classe dell'insieme di oggetti in uscita dalla componente.
 
-Applichiamo adesso l'operatore di composizione plug: i risultato dell'applicazione sarà un nuovo termine, non più primitivo, ma composto:
+Una volta definite le informazioni di base del connettore, possiamo procedere con la definizione dei due concetti restanti: la logica di splitting e la logica di routing.
+
+Con logica di splitting intendiamo quale procedimento seguire per dividere il messaggio in ingresso in un insieme di messaggi compatibili con l'applicazione destinataria. Nel nostro caso  la logica di splitting fa riferimento ad una procedura che, preso in ingresso un oggetto carrello, trasmette gli item in esso presenti. L'implementazione è la seguente
+
+La definizione di uno splitter richiede una serie di passi ben articolati. 
+Inizialmente definiamo le informazioni di base del nostro oggetto splitter:
 <code>
-CompoundTerm ct = new Plug(p, new Plug(s,c));
-</code>
-Avviamo il nuovo connettore, lasciandolo in esecuzione per 5 secondi: 		
-<code>
-	ct.start(); 
-	try { 
-		Thread.sleep(5000); 
-	} catch (InterruptedException e) { 
-		// TODO Auto-generated catch block 
-		e.printStackTrace(); 
+	public List of Item splitItem(Cart cart) {
+		return cart.getItems();
 	}
 </code>
-Adesso è possibile vedere in esecuzione il connettore. Man mano vengono restituiti messaggi che mostrano il comportamento atteso. Ciò puà essere constato da questi due ultimi messaggi sulla console, scritti dal consumer
-<code>
-consumed Exchange[Message: Item@XXXXXX] by core.compoundterm.primitiveterm.Cons$1$1@XXXXX
+Dalla definizione del metodo risciamo a capire che da un singolo oggetto in ingresso, riusciamo ad ottenere un'insieme di oggetti ad esso associati.
 
-consumed Exchange[Message: Item@XXXXXX] by core.compoundterm.primitiveterm.Cons$1$1@XXXXX
+Per effettuare una sorta di binding tra la nostra logica e la primitiva split che stiamo definendo, aggiungiamo nella classe First la seguente riga di codice:
+<code>
+s.setSplittingLogic(First.class, "splitItem");
 </code>
+Con questa istruzione indichiamo che il metodo che si occupa di dividere i messaggi in ingresso è presente nella classe First (la stessa del connettore), e si chiama “splitItem”. 
+
+Allo stesso modo dobbiamo definire una logica di routing, questa volta però dobbiamo passare allo splitter l'oggetto che contiene il metodo che usiamo per il routing:
 <br><br><b>Studio delle altre primitive</b><br><br>
 Dopo aver appreso il funzionamento generale della libreria, i concetti visti si applicano anche per le altre primitive. L'unica cosa che cambia tra una primitiva e l'altra è la definizione della sua logica. Come abbiamo appena visto, uno splitter ha una logica di splitting e una logica di routing; per il merge, ad esempio, possiamo definire una nostra logica di aggregazione, do sostituire a quella di default. La definizione della logica deve seguire però determinate regole. Quello che faremo qui di seguito sarà capire come interagire con le varie primitive
 
