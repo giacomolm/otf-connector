@@ -115,7 +115,7 @@ consumed Exchange[Message: Item@XXXXXX] by core.compoundterm.primitiveterm.Cons$
 consumed Exchange[Message: Item@XXXXXX] by core.compoundterm.primitiveterm.Cons$1$1@XXXXX
 
 <br><br><b>Studio delle altre primitive</b><br><br>
-Dopo aver appreso il funzionamento generale della libreria, i concetti visti si applicano anche per le altre primitive. L'unica cosa che cambia tra una primitiva e l'altra è la definizione della sua logica. Come abbiamo appena visto, uno splitter ha una logica di splitting e una logica di routing; per il merge, ad esempio, possiamo definire una nostra logica di aggregazione, do sostituire a quella di default. La definizione della logica devo seguire determinate regole: per ciascuna primitiva vedremo come possiamo integrare la nostra logica.
+Dopo aver appreso il funzionamento generale della libreria, i concetti visti si applicano anche per le altre primitive. L'unica cosa che cambia tra una primitiva e l'altra è la definizione della sua logica. Come abbiamo appena visto, uno splitter ha una logica di splitting e una logica di routing; per il merge, ad esempio, possiamo definire una nostra logica di aggregazione, do sostituire a quella di default. La definizione della logica deve seguire però determinate regole. Quello che faremo qui di seguito sarà capire come interagire con le varie primitive
 
 <b>Transformer</b>
 <br>
@@ -166,11 +166,11 @@ public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
 L'utilizzo della primitiva order può includere la definizione di una propria permutazione.Cerchiamo di capire come possiamo definire la nostra funzione di permutazione.  Facendo riferimento all'esempio OrderExample, possiamo vedere che abbiamo un endpoint sorgente che invia tre Stringhe: "Ciao", "come", "Stai". Le sorgenti sono impostate in modo tale che questi messaggi non arrivano in ordine: cioè il connettore potrebbe ricevere ad esempio le tre stringhe ad esempio in questa sequenza "stai?" "ciao" e "Come". La primitiva order permette di procedere con il riordinamento di questi messaggi, tramite la funzione di permutazione:
 Questa funzione prende in ingresso il messaggio in arrivo alla componente e restituisce un Integer che ne indica la sua posizione nella sequenza. Ad esempio, nel nostro caso, la sequenza è la seguente: "Ciao"->1, "come"->2, "stai?"->3. La funzione viene così definita:	
 
-public Integer myPermutation(String s){
-		if(s.equals(" stai ?")) return new Integer(2);
-		if(s.equals(" come ")) return new Integer(1);
-		if(s.equals(" ciao ")) return new Integer(0);
-		return -1;
+public Integer myPermutation(String s){<br>
+		if(s.equals(" stai ?")) return new Integer(2);<br>
+		if(s.equals(" come ")) return new Integer(1);<br>
+		if(s.equals(" ciao ")) return new Integer(0);<br>
+		return -1;<br>
 	} 
 
 Una volta ricevuti questi tre messaggi, la primitiva provvede all'ordinamento e all'inoltro dei messaggi nella corretta sequenza.
