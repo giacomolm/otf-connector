@@ -134,3 +134,32 @@ metodo dovrà essere coerento con quanto desiderato dal ricevente
                 //nel nostro caso aggiungiamo la stringa camel a quella ricevuta
 		return body+" Cameled";
 	}
+<br>
+<b>Splitter</b>
+<br>
+L'esempio presente nella libreria, SplitterExample, è lo stesso visto in precedenza:Split Example with Plug application
+
+<br>
+<b>Merge</b><br>
+
+Nel caso del Merge possiamo definire una nostra logica di aggregazioe, che nel caso di camel prende il nome di strategia di aggregazione. L'approccio seguito fa riferimento alla seguente pagina, http://camel.apache.org/aggregator.html: nella sezione <i>Using Custom Strategy</i> possiamo trovare tutti i dettagli.
+La definizione di una propria logica di aggregazione comporta la definizione di una nuova classe che implementi AggregationStrategy, presente nella libreria camel-coreX.X, e che contenga la definizione del metodo aggregate. Riceve in ingresso due parametri tipo exchange e restituisce un'oggetto di tipo Exchange. Di seguito abbiamo un esempio, nel quale aggreghiamo tutti gli oggetti che stiamo ricevendo. Infatti il secondo parametro fa riferimento ad un messaggio appena ricevuto, mentre il primo rappresenta l'aggregazione che stiamo conservando. Questa rappresenta la strategia di aggregazione di default:
+
+public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
+		Object newBody = newExchange.getIn().getBody();
+		ArrayList<Object> list = null;
+		//first time we do aggregation
+	    if (oldExchange == null) {
+			list = new ArrayList<Object>();
+			list.add(newBody);
+			newExchange.getIn().setBody(list);
+			return newExchange;
+	    } 
+	    else{
+		    list = oldExchange.getIn().getBody(ArrayList.class);
+			list.add(newBody);
+			return oldExchange;
+	    }
+    }
+<br>
+<b>Order</b><br>
