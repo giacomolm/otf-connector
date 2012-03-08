@@ -58,6 +58,6 @@ public class SplitterExample {
 			dest.add("vm:endpoint2");
 			return dest;
 		}
-		else return dest;
+		else return null;
 	}
 }

@@ -44,7 +44,7 @@ public class Merge extends PrimitiveTerm{
 	private Port receiver;
 	private AggregationStrategy agg_strategy = new DefaultAggregationLogic();
 	private static boolean sequence[];
-	private int completition_size;
+	private int completition_size = 1;
 
 	public Merge(final String sourcesuri, Class in_type,String receiveruri,Class out_type) {
 		// TODO Auto-generated constructor stub

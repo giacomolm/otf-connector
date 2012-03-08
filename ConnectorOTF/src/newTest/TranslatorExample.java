@@ -7,7 +7,7 @@ package newTest;
  * al translator. Una volta ricevuto il messaggio, il translator modifica la stringa
  * in relazione alla propria logica di traduzione e inoltra il messaggio all'effettivo
  * destinatario. Lo scopo dell'esempio è quello di capire il funzionamento del translator
- * e come può essere applicata la logica di transformazione
+ * e come può essere applicata la logica di transformazione.
  */
 
 import core.compoundterm.CompoundTerm;
@@ -28,6 +28,19 @@ public class TranslatorExample {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * La logica di traduzione è un semplice metodo che prende in ingresso
+	 * l'oggetto in arrivo al translator e provvede alla sua modifica.
+	 * In questo caso sappiamo che i messaggi in arrivo al nostro connettore
+	 * sono delle stringhe: infatti nel metodo abbiamo un parametro di 
+	 * tipo stringa. Ogni volta che abbiamo un messaggio in ingresso verrà
+	 * chiamato il seguente metodo che provvederà alle opportune modifiche
+	 * per adeguare la comunicazione. Naturalmente il tipo di ritorno del 
+	 * metodo dovrà essere coerento con quanto desiderato dal ricevente
+	 * @param body
+	 * @return
+	 */
 	public String setContent(String body){
 		return body+" Cameled";
 	}
