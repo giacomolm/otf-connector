@@ -143,7 +143,7 @@ public class Merge extends PrimitiveTerm{
 		}
 	}
 	
-	public void setCompletitionTime(int size){
+	public void setCompletitionSize(int size){
 		this.completition_size = size;
 	}
 }
