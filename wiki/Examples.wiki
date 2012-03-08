@@ -169,7 +169,7 @@ public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
 Inoltre è obbligatorio impostare la taglia dei elementi che si vogliono aggregare. Se i prossimi 5 messaggi in ingresso formano la nostra aggregazione, possiamo procedere con 
 <code>
 //Assuming m an instance of Merge
-m.setCompletitionSize(3);
+m.setCompletitionSize(5);
 </code>
 <br>
 <b>Order</b><br>
