@@ -8,6 +8,12 @@ import org.apache.camel.processor.aggregate.AggregationStrategy;
 
 import core.exceptions.DefaultAggregationLogicException;
 
+/**
+ * Follow the details listed in http://camel.apache.org/aggregator.html
+ * @author giacomolm
+ *
+ */
+
 public class DefaultAggregationLogic implements AggregationStrategy {
 
 	Class out_class;
@@ -26,12 +32,14 @@ public class DefaultAggregationLogic implements AggregationStrategy {
 	public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
 		Object newBody = newExchange.getIn().getBody();
 		ArrayList<Object> list = null;
+		//first time we do aggregation
 	    if (oldExchange == null) {
 			list = new ArrayList<Object>();
 			list.add(newBody);
 			newExchange.getIn().setBody(list);
 			return newExchange;
-	    } else {
+	    } 
+	    else{
 		    list = oldExchange.getIn().getBody(ArrayList.class);
 			list.add(newBody);
 			return oldExchange;

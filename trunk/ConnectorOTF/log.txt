@@ -1,13 +1,9 @@
-Component core.compoundterm.primitiveterm.Prod@1efb836 added, to: vm:endpoint1
-Component core.compoundterm.primitiveterm.Prod@126e85f added, to: vm:endpoint2
-Component core.compoundterm.primitiveterm.Prod@161f10f added, to: vm:endpoint3
-Component core.compoundterm.primitiveterm.Order@148aa23 added
-Route defined: [Route[[From[vm:endpoint1]] -> [process[core.compoundterm.CompoundTerm$1$1@2f1921]]]]
-core.compoundterm.primitiveterm.Prod@1efb836 Sending message  stai ? to Endpoint[vm://endpoint1]
-Route defined: [Route[[From[vm:endpoint2]] -> [process[core.compoundterm.CompoundTerm$1$1@1c888d9]]]]
-core.compoundterm.primitiveterm.Prod@126e85f Sending message  ciao  to Endpoint[vm://endpoint2]
-Route defined: [Route[[From[vm:endpoint3]] -> [process[core.compoundterm.CompoundTerm$1$1@d7b7d9]]]]
-core.compoundterm.primitiveterm.Prod@161f10f Sending message  come  to Endpoint[vm://endpoint3]
-Sendend message Exchange[Message:  ciao ]
-Sendend message Exchange[Message:  come ]
-Sendend message Exchange[Message:  stai ?]
+Component core.compoundterm.primitiveterm.Split@148aa23 added, source: (vm:internal1) to: vm:endpoint2
+Component core.compoundterm.primitiveterm.Cons@199f91c added, source:  (vm:internal1)Component core.compoundterm.primitiveterm.Prod@1b1aa65 added, to: vm:endpoint1
+Route defined: [Route[[From[vm:endpoint1]] -> [process[core.compoundterm.CompoundTerm$1$1@16df84b]]]]
+core.compoundterm.primitiveterm.Prod@1b1aa65 Sending message newTest.Cart@aa233f to Endpoint[vm://endpoint1]
+Route defined: [Route[[From[vm:endpoint2]] -> [process[core.compoundterm.CompoundTerm$1$1@c3e9e9]]]]
+Component core.compoundterm.primitiveterm.Split@148aa23 started, source: (vm:internal0)
+Component core.compoundterm.primitiveterm.Cons@199f91c started
+consumed Exchange[Message: newTest.Item@1de0b5e] by core.compoundterm.primitiveterm.Cons$1$1@8aeed0
+consumed Exchange[Message: newTest.Item@497904] by core.compoundterm.primitiveterm.Cons$1$1@8aeed0

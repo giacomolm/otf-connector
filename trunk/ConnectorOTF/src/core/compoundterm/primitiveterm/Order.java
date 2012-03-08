@@ -41,7 +41,7 @@ public class Order extends PrimitiveTerm{
 	Exchange al[];
 	int sended = 0;
 	private static boolean sequence[]; 
-	private int size;
+	private int size = 1;
 	Object permutation = new DefaultOrderLogic();
 	String perm_method_name = "order"; 
 

@@ -163,6 +163,6 @@ public class Tutorial {
 			receivers.add("vm:endpoint2");
 			return receivers;
 		}
-		else return null;
+		else return receivers;
 	}
 }
