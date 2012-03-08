@@ -168,7 +168,7 @@ public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
 
 Inoltre è obbligatorio impostare la taglia dei elementi che si vogliono aggregare. Se i prossimi 5 messaggi in ingresso formano la nostra aggregazione, possiamo procedere con 
 <code>
-Merge m = new Merge(sources_uri, String.class, destsUri, ArrayList.class);
+//Assuming m an instance of Merge
 m.setCompletitionSize(3);
 </code>
 <br>
@@ -185,6 +185,7 @@ public Integer myPermutation(String s){
 </code>
 Inoltre, come per il merge, dobbiamo definire il numero di messaggi che dobbiamo permutare:
 <code>
+//Assuming o an istance of Order
 o.setSequenceSize(3);
 </code>
 Una volta ricevuti questi tre messaggi, la primitiva provvede all'ordinamento e all'inoltro dei messaggi nella corretta sequenza.
