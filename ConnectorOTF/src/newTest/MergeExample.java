@@ -18,10 +18,14 @@ import core.compoundterm.primitiveterm.Prod;
 public class MergeExample {
 
 	public static void main(String[] args) {
+		
+		Merge m = new Merge("vm:start1,vm:start2,vm:start3", String.class, "vm:end", ArrayList.class);
+		m.setCompletitionSize(3);
+		
 		CompoundTerm ct = new Plug(new Prod("vm:start1", String.class, "Ciao "),
 									new Plug(new Prod("vm:start2", String.class, "come "),
 											new Plug(new Prod("vm:start3", String.class, "stai ?"),
-													new Plug(new Merge("vm:start1,vm:start2,vm:start3", String.class, "vm:end", ArrayList.class),
+													new Plug(m,
 															new Cons("vm:end", Collection.class)
 															)
 													)

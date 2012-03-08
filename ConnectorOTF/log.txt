@@ -1,9 +1,14 @@
-Component core.compoundterm.primitiveterm.Split@148aa23 added, source: (vm:internal1) to: vm:endpoint2
-Component core.compoundterm.primitiveterm.Cons@199f91c added, source:  (vm:internal1)Component core.compoundterm.primitiveterm.Prod@1b1aa65 added, to: vm:endpoint1
-Route defined: [Route[[From[vm:endpoint1]] -> [process[core.compoundterm.CompoundTerm$1$1@16df84b]]]]
-core.compoundterm.primitiveterm.Prod@1b1aa65 Sending message newTest.Cart@aa233f to Endpoint[vm://endpoint1]
-Route defined: [Route[[From[vm:endpoint2]] -> [process[core.compoundterm.CompoundTerm$1$1@c3e9e9]]]]
-Component core.compoundterm.primitiveterm.Split@148aa23 started, source: (vm:internal0)
-Component core.compoundterm.primitiveterm.Cons@199f91c started
-consumed Exchange[Message: newTest.Item@1de0b5e] by core.compoundterm.primitiveterm.Cons$1$1@8aeed0
-consumed Exchange[Message: newTest.Item@497904] by core.compoundterm.primitiveterm.Cons$1$1@8aeed0
+Component core.compoundterm.primitiveterm.Merge@27391d added, source: (vm:internal1) to: vm:end
+Component core.compoundterm.primitiveterm.Prod@116ab4e added, to: vm:start1
+Component core.compoundterm.primitiveterm.Prod@148aa23 added, to: vm:start2
+Component core.compoundterm.primitiveterm.Prod@199f91c added, to: vm:start3
+Component core.compoundterm.primitiveterm.Cons@1b1aa65 added, source:  (vm:internal4)Route defined: [Route[[From[vm:start1]] -> [process[core.compoundterm.CompoundTerm$1$1@16df84b]]]]
+core.compoundterm.primitiveterm.Prod@116ab4e Sending message Ciao  to Endpoint[vm://start1]
+Route defined: [Route[[From[vm:start2]] -> [process[core.compoundterm.CompoundTerm$1$1@4be2cc]]]]
+core.compoundterm.primitiveterm.Prod@148aa23 Sending message come  to Endpoint[vm://start2]
+Route defined: [Route[[From[vm:start3]] -> [process[core.compoundterm.CompoundTerm$1$1@10deb5f]]]]
+core.compoundterm.primitiveterm.Prod@199f91c Sending message stai ? to Endpoint[vm://start3]
+Route defined: [Route[[From[vm:end]] -> [process[core.compoundterm.CompoundTerm$1$1@167d7fb]]]]
+Component core.compoundterm.primitiveterm.Merge@27391d started, source: (vm:internal0)
+Component core.compoundterm.primitiveterm.Cons@1b1aa65 started
+consumed Exchange[Message: [Ciao , come , stai ?]] by core.compoundterm.primitiveterm.Cons$1$1@cfe049
