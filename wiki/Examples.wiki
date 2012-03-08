@@ -165,6 +165,12 @@ public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
               return oldExchange;
        }
 }</code>
+
+Inoltre è obbligatorio impostare la taglia dei elementi che si vogliono aggregare. Se i prossimi 5 messaggi in ingresso formano la nostra aggregazione, possiamo procedere con 
+<code>
+Merge m = new Merge(sources_uri, String.class, destsUri, ArrayList.class);
+m.setCompletitionSize(3);
+</code>
 <br>
 <b>Order</b><br>
 L'utilizzo della primitiva order può includere la definizione di una propria permutazione.Cerchiamo di capire come possiamo definire la nostra funzione di permutazione.  Facendo riferimento all'esempio OrderExample, possiamo vedere che abbiamo un endpoint sorgente che invia tre Stringhe: "Ciao", "come", "Stai". Le sorgenti sono impostate in modo tale che questi messaggi non arrivano in ordine: cioè il connettore potrebbe ricevere ad esempio le tre stringhe in questa sequenza "stai?" "ciao" e "Come". La primitiva order permette di procedere con il riordinamento di questi messaggi, tramite la funzione di permutazione.
@@ -176,5 +182,9 @@ public Integer myPermutation(String s){
                 if(s.equals(" ciao ")) return new Integer(0);
                 return -1;
         } 
+</code>
+Inoltre, come per il merge, dobbiamo definire il numero di messaggi che dobbiamo permutare:
+<code>
+o.setSequenceSize(3);
 </code>
 Una volta ricevuti questi tre messaggi, la primitiva provvede all'ordinamento e all'inoltro dei messaggi nella corretta sequenza.
