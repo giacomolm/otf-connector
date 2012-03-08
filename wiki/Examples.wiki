@@ -185,7 +185,7 @@ public Integer myPermutation(String s){
 </code>
 Inoltre, come per il merge, dobbiamo definire il numero di messaggi che dobbiamo permutare:
 <code>
-//Assuming o an istance of Order
+//Assuming o an instance of Order
 o.setSequenceSize(3);
 </code>
 Una volta ricevuti questi tre messaggi, la primitiva provvede all'ordinamento e all'inoltro dei messaggi nella corretta sequenza.
