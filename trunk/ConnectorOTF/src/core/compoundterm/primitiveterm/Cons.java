@@ -26,7 +26,7 @@ import core.Port;
  */
 public class Cons extends PrimitiveTerm{
 	Port source_port;
-	
+	Object consumed_message;
 	/**
 	 * Build new extra send primitive that consumes message comes from sourceUri
 	 * parameter. in_type parameter gives information about type managed by this
@@ -37,6 +37,22 @@ public class Cons extends PrimitiveTerm{
 	public Cons(final String sourceUri, Class in_type) {
 		source_port = new Port(sourceUri,in_type,getId()); 
 		addSource(source_port);
+		out.append("Component "+this+" added, source:  ("+internal+""+getId()+")");
+		out.flush();
+	}
+	
+	/**
+	 * Build new extra send primitive that consumes message comes from sourceUri
+	 * parameter. in_type parameter gives information about type managed by this
+	 * term.
+	 * @param sourceUri term consume message from this sourceUri
+	 * @param in_type term is able to manage this type of input-message
+	 * @param o contains consumed message content
+	 */
+	public Cons(final String sourceUri, Class in_type,Object o) {
+		source_port = new Port(sourceUri,in_type,getId()); 
+		addSource(source_port);
+		o = consumed_message;
 		out.append("Component "+this+" added, source:  ("+internal+""+getId()+")");
 		out.flush();
 	}
@@ -60,7 +76,8 @@ public class Cons extends PrimitiveTerm{
 					process(new Processor() {
 						@Override
 						public void process(Exchange e) throws Exception {
-							out.append("consumed "+e+" by "+this+"\n");
+							consumed_message = e.getIn().getBody();
+							System.out.append("consumed "+e+" by "+this+"\n");
 							out.flush();
 						}
 					});
@@ -85,6 +102,13 @@ public class Cons extends PrimitiveTerm{
 			for(int i=0; i<source_port.getId().size(); i++)
 				producer.send(internal+""+source_port.getId().get(i), e);
 		}
+	}
+	
+	/**
+	 * @return last consumed message
+	 */
+	public Object getConsumedMessage(){
+		return consumed_message;
 	}
 	
 }
