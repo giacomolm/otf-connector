@@ -104,6 +104,7 @@ public class Merge extends PrimitiveTerm{
 							// TODO Auto-generated method stub
 							for(int i=0; i<sequence.length; i++){
 								//dobbiamo azzerare il fatto che abbiamo ricevuto un messaggio di quel tipo
+								//System.out.println("arg0 "+arg0);
 								sequence[i]=false;
 							}
 						}
@@ -129,15 +130,18 @@ public class Merge extends PrimitiveTerm{
 	public void setMessage(String uri, Exchange e) {
 		// TODO Auto-generated method stub
 		int k = 0;
+		//System.out.println("set "+e);
 		for(Iterator<Port> i = sources.iterator(); i.hasNext();){
 			Port source  = i.next();
 			//controllo se esiste qualche porta associata al merge che sia mappata con quell'uri
 			if(source.getUri().equals(uri)){
+				
 				//verifico se ho già nel 'buffer' un messaggio di quel tipo
-				if(!sequence[k]){
-					sequence[k]=true;
+				//if(!sequence[k]){
+				//	sequence[k]=true;
+					
 					producer.send(internal+""+source.getId().get(0), e);
-				}
+				//}
 			}
 			k++;
 		}

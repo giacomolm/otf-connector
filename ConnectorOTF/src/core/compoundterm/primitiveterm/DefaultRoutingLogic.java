@@ -16,6 +16,7 @@ public class DefaultRoutingLogic {
 	}
 	
 	public String route(Object o){
+		//System.out.println("object "+o);
 		if(!o.equals(prev)){
 			prev = o;
 			return receivers;

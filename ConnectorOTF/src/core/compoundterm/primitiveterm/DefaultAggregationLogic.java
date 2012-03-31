@@ -31,6 +31,7 @@ public class DefaultAggregationLogic implements AggregationStrategy {
 	
 	public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
 		Object newBody = newExchange.getIn().getBody();
+		//System.out.println("body "+newBody);
 		ArrayList<Object> list = null;
 		//first time we do aggregation
 	    if (oldExchange == null) {

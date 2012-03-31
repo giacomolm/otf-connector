@@ -1,14 +1,22 @@
-Component core.compoundterm.primitiveterm.Merge@27391d added, source: (vm:internal1) to: vm:end
-Component core.compoundterm.primitiveterm.Prod@116ab4e added, to: vm:start1
-Component core.compoundterm.primitiveterm.Prod@148aa23 added, to: vm:start2
-Component core.compoundterm.primitiveterm.Prod@199f91c added, to: vm:start3
-Component core.compoundterm.primitiveterm.Cons@1b1aa65 added, source:  (vm:internal4)Route defined: [Route[[From[vm:start1]] -> [process[core.compoundterm.CompoundTerm$1$1@16df84b]]]]
-core.compoundterm.primitiveterm.Prod@116ab4e Sending message Ciao  to Endpoint[vm://start1]
-Route defined: [Route[[From[vm:start2]] -> [process[core.compoundterm.CompoundTerm$1$1@4be2cc]]]]
-core.compoundterm.primitiveterm.Prod@148aa23 Sending message come  to Endpoint[vm://start2]
-Route defined: [Route[[From[vm:start3]] -> [process[core.compoundterm.CompoundTerm$1$1@10deb5f]]]]
-core.compoundterm.primitiveterm.Prod@199f91c Sending message stai ? to Endpoint[vm://start3]
-Route defined: [Route[[From[vm:end]] -> [process[core.compoundterm.CompoundTerm$1$1@167d7fb]]]]
-Component core.compoundterm.primitiveterm.Merge@27391d started, source: (vm:internal0)
-Component core.compoundterm.primitiveterm.Cons@1b1aa65 started
-consumed Exchange[Message: [Ciao , come , stai ?]] by core.compoundterm.primitiveterm.Cons$1$1@cfe049
+Component core.compoundterm.primitiveterm.Trans@161f10f added, source: mina:tcp://localhost:6886?textline=true&sync=false to: file://log?fileName=report.txt
+Component core.compoundterm.primitiveterm.Trans@161f10f started source(s) [Port mina:tcp://localhost:6886?textline=true&sync=false Terms[core.compoundterm.primitiveterm.Trans@161f10f]] 0 receiver(s)[Port file://log?fileName=report.txt Terms[core.compoundterm.primitiveterm.Trans@161f10f]]
+Component core.compoundterm.primitiveterm.Split@f0b4a3 added, source: (vm:internal2) to: file://log?fileName=report.txt
+Component core.compoundterm.primitiveterm.Split@f0b4a3 started, source: (vm:internal1)
+Component core.compoundterm.primitiveterm.Split@c16b18 added, source: (vm:internal3) to: vm:porta1
+Component core.compoundterm.primitiveterm.Merge@120540c added, source: (vm:internal4) to: vm:porta2
+Component core.compoundterm.primitiveterm.Trans@16de067 added, source: vm:porta2 to: file://log?fileName=report.txt
+Route defined: [Route[[From[vm:porta2]] -> [process[core.compoundterm.CompoundTerm$1$1@2f2295]]], Route[[From[mina:tcp://localhost:6894?textline=true&sync=false]] -> [process[core.compoundterm.Plug$1$1@878c4c]]]]
+Component core.compoundterm.primitiveterm.Trans@16de067 started source(s) [Port vm:porta2 Terms[core.compoundterm.primitiveterm.Trans@16de067]] 4 receiver(s)[Port file://log?fileName=report.txt Terms[core.compoundterm.primitiveterm.Trans@16de067]]
+Route defined: [Route[[From[vm:porta1]] -> [process[core.compoundterm.CompoundTerm$1$1@18efaea]]]]
+Component core.compoundterm.primitiveterm.Merge@120540c started, source: (vm:internal3)
+Component core.compoundterm.primitiveterm.Split@c16b18 started, source: (vm:internal2)
+Component core.compoundterm.primitiveterm.Split@11bd9c9 added, source: (vm:internal8) to: vm:door1
+Component core.compoundterm.primitiveterm.Order@4e2f0a added
+Component core.compoundterm.primitiveterm.Merge@f268de added, source: (vm:internal10) to: vm:door3
+Component core.compoundterm.primitiveterm.Trans@c2cf83 added, source: vm:door3 to: file://log?fileName=report.txt
+Route defined: [Route[[From[vm:door3]] -> [process[core.compoundterm.CompoundTerm$1$1@1c5af2e]]], Route[[From[mina:tcp://localhost:6889?textline=true&sync=false]] -> [process[core.compoundterm.Plug$1$1@1702c48]]]]
+Component core.compoundterm.primitiveterm.Trans@c2cf83 started source(s) [Port vm:door3 Terms[core.compoundterm.primitiveterm.Trans@c2cf83]] 10 receiver(s)[Port file://log?fileName=report.txt Terms[core.compoundterm.primitiveterm.Trans@c2cf83]]
+Route defined: [Route[[From[vm:door2]] -> [process[core.compoundterm.CompoundTerm$1$1@ae1cf]]]]
+Component core.compoundterm.primitiveterm.Merge@f268de started, source: (vm:internal9)
+Route defined: [Route[[From[vm:door1]] -> [process[core.compoundterm.CompoundTerm$1$1@268cc6]]]]
+Component core.compoundterm.primitiveterm.Split@11bd9c9 started, source: (vm:internal7)
