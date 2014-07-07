@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<terms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <term xsi:type="plug">
+    <id>
+      myPlug</id>
+    <actions>
+      <output>
+        <label>
+          a</label>
+        <uri>
+        </uri>
+        <type>
+        </type>
+      </output>
+    </actions>
+    <term xsi:type="prod">
+      <id>
+        myProd</id>
+      <states>
+        <state>
+          undefined</state>
+        <start>
+        </start>
+      </states>
+      <actions>
+        <output>
+          <label>
+            a</label>
+          <uri>
+          </uri>
+          <type>
+          </type>
+        </output>
+      </actions>
+    </term>
+    <term xsi:type="cons">
+      <id>
+        myCons</id>
+      <states>
+        <state>
+          undefined</state>
+        <start>
+        </start>
+      </states>
+      <actions>
+        <input>
+          <label>
+            a</label>
+          <uri>
+          </uri>
+          <type>
+          </type>
+        </input>
+      </actions>
+    </term>
+  </term>
+</terms>
