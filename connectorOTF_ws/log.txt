@@ -1,0 +1,2 @@
+Component it.univaq.disim.connectorOTF.core.compoundterm.primitiveterm.Prod@4439f31e added, to: direct-vm:port1
+it.univaq.disim.connectorOTF.core.compoundterm.primitiveterm.Prod@4439f31e Sending message a to Endpoint[direct-vm://port1]
