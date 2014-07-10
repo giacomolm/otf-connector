@@ -44,15 +44,19 @@ public class ProdTest {
      */
     @org.junit.Test
     public void testStart() {
-        System.out.println("start");
-        Prod instance = new Prod("direct-vm:port1", String.class, "a");
-        instance.start();
+        
+        
         try {
-                Thread.sleep(3000);
+                Prod instance = new Prod("mina:tcp://localhost:6898?textline=true&sync=false", String.class, "b");
+                instance.start();
+                Thread.sleep(1000);
         } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
         }
+        catch(Exception e){
+            
+    }
     }
 
     

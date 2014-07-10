@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<terms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <term xsi:type="plug">
+    <id>
+    </id>
+    <actions>
+      <output>
+        <label>
+          a</label>
+        <uri>
+          vm:port1</uri>
+        <type>
+          java.lang.String</type>
+      </output>
+    </actions>
+    <term xsi:type="prod">
+      <id>
+        a</id>
+      <states>
+        <state>
+          undefined</state>
+        <start>
+        </start>
+      </states>a
+      <actions>
+        <output>
+          <label>
+            a</label>
+          <uri>
+            vm:port1</uri>
+          <type>
+            java.lang.String</type>
+        </output>
+      </actions>
+    </term>
+    <term xsi:type="cons">
+      <id>
+        b</id>
+      <states>
+        <state>
+          undefined</state>
+        <start>
+        </start>
+      </states>
+      <actions>
+        <input>
+          <label>
+            a</label>
+          <uri>
+            vm:port1</uri>
+          <type>
+            java.lang.String</type>
+        </input>
+      </actions>
+    </term>
+  </term>
+</terms>

@@ -1,12 +1,7 @@
 package it.univaq.disim.connectorOTF.core.compoundterm.primitiveterm;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
@@ -40,7 +35,7 @@ import it.univaq.disim.connectorOTF.core.exceptions.DefaultAggregationLogicExcep
 
 public class Merge extends PrimitiveTerm{
 
-	private ArrayList<Port> sources = new ArrayList<Port>();
+	
 	private Port receiver;
 	private AggregationStrategy agg_strategy = new DefaultAggregationLogic();
 	private static boolean sequence[];
@@ -49,13 +44,13 @@ public class Merge extends PrimitiveTerm{
 	public Merge(final String sourcesuri, Class in_type,String receiveruri,Class out_type) {
 		// TODO Auto-generated constructor stub
 		String[] sources_uri = sourcesuri.split(",");
+                System.out.println("Sources "+sourcesuri);
 		for(int i=0; i<sources_uri.length; i++){
 			Port port = new Port(sources_uri[i],in_type,getId());
 			port.setTerm(this);
-			sources.add(port);
 			addSource(port);
 		}
-		completition_size = sources.size();
+		completition_size = getSources().size();
 		receiver = new Port(receiveruri, out_type, getId());
 		addReceiver(receiver);
 		sequence = new boolean[sources_uri.length];
@@ -75,7 +70,7 @@ public class Merge extends PrimitiveTerm{
 		for(int i=0; i<sources_uri.length; i++){
 			Port port = new Port(sources_uri[i],in_type,getId());
 			port.setTerm(this);
-			sources.add(port);
+			getSources().add(port);
 			addSource(port);
 		}
 		receiver = new Port(receiveruri, out_type, getId());
@@ -102,19 +97,20 @@ public class Merge extends PrimitiveTerm{
 						@Override
 						public void process(Exchange arg0) throws Exception {
 							// TODO Auto-generated method stub
+                                                        System.out.println("Aggregation result "+arg0);
 							for(int i=0; i<sequence.length; i++){
 								//dobbiamo azzerare il fatto che abbiamo ricevuto un messaggio di quel tipo
-								//System.out.println("arg0 "+arg0);
 								sequence[i]=false;
 							}
+                                                        setCurrentState(getStart());
 						}
 					}).
 					to(receiver.getUri());
 					
 				}
 			});
-			out.append("Component "+this+" started, source: ("+internal+""+getId()+")\n");
-			//out.close();
+			out.append("Component "+this+" started, source: ("+internal+""+getId()+") completion size:"+completition_size+"\n");                       
+			out.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -131,7 +127,7 @@ public class Merge extends PrimitiveTerm{
 		// TODO Auto-generated method stub
 		int k = 0;
 		//System.out.println("set "+e);
-		for(Iterator<Port> i = sources.iterator(); i.hasNext();){
+		for(Iterator<Port> i = getSources().iterator(); i.hasNext();){
 			Port source  = i.next();
 			//controllo se esiste qualche porta associata al merge che sia mappata con quell'uri
 			if(source.getUri().equals(uri)){

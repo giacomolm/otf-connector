@@ -74,7 +74,7 @@ public class SpringAlterationListener extends FileAlterationListenerAdaptor{
         
         @RequestMapping(value="/log")
 	public ModelAndView log() throws IOException{
-                BufferedReader br = new BufferedReader(new FileReader("log.Txt"));
+                BufferedReader br = new BufferedReader(new FileReader("log.txt"));
                 String sCurrentLine, result="";
                 while ((sCurrentLine = br.readLine()) != null) {
                     result += sCurrentLine+"\n";
