@@ -40,24 +40,6 @@ public class Trans extends PrimitiveTerm{
 	String receiver;
 	Port receiver_port,source_port;
 	
-	/**
-	 * Build new trans term, including base info such as source and receiver uri,
-	 * and types expected from these uri.
-	 * @param sourceUri term consumes message from this sourceUri
-	 * @param in_type term is able to manage this type of input-message
-	 * @param receiverUri term sends message to this receiverUri
-	 * @param out_type type of the output message
-	 */
-	public Trans(final String sourceUri, Class in_type, final String receiverUri, Class out_type){
-		source_port = new Port(sourceUri,in_type,getId());
-		addSource(source_port);
-		receiver_port = new Port(receiverUri,out_type,getId());
-		addReceiver(receiver_port);
-		methodclass = DefaultTransformLogic.class;
-		methodname = "transform";
-		out.append("Component "+this+" added, source: "+sourceUri+" to: "+receiverUri+"\n");
-		out.flush();
-	}
 	
 	/**
 	 * This version of constructor specify also information about method that 
@@ -75,6 +57,25 @@ public class Trans extends PrimitiveTerm{
 		receiver_port = new Port(receiverUri,out_type,getId());
 		addReceiver(receiver_port);
 		setTransformLogic(method_class, method_name);
+		out.append("Component "+this+" added, source: "+sourceUri+" to: "+receiverUri+"\n");
+		out.flush();
+	}
+	
+	/**
+	 * Build new trans term, including base info such as source and receiver uri,
+	 * and types expected from these uri.
+	 * @param sourceUri term consumes message from this sourceUri
+	 * @param in_type term is able to manage this type of input-message
+	 * @param receiverUri term sends message to this receiverUri
+	 * @param out_type type of the output message
+	 */
+	public Trans(final String sourceUri, Class in_type, final String receiverUri, Class out_type){
+		source_port = new Port(sourceUri,in_type,getId());
+		addSource(source_port);
+		receiver_port = new Port(receiverUri,out_type,getId());
+		addReceiver(receiver_port);
+		methodclass = DefaultTransformLogic.class;
+		methodname = "transform";
 		out.append("Component "+this+" added, source: "+sourceUri+" to: "+receiverUri+"\n");
 		out.flush();
 	}

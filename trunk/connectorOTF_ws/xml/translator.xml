@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<terms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <term xsi:type="trans">
+    <id>
+      myTrans</id>
+    <states>
+      <state>
+        undefined</state>
+      <start>
+      </start>
+    </states>
+    <actions>
+      <input>
+        <label>
+          a</label>
+        <uri>
+          vm:port1</uri>
+        <type>
+          java.lang.String</type>
+      </input>
+      <output>
+        <label>
+          b</label>
+        <uri>
+          vm:port2</uri>
+        <type>
+          java.lang.String</type>
+      </output>
+    </actions>
+    <protocol>
+      <transitions>
+        <source>
+        </source>
+        <label>
+        </label>
+        <target>
+        </target>
+      </transitions>
+      <semantic>
+        <translatorClass>
+        </translatorClass>
+        <translatorMethod>
+        </translatorMethod>
+      </semantic>
+    </protocol>
+  </term>
+</terms>

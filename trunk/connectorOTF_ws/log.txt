@@ -1,2 +1,12 @@
-Component it.univaq.disim.connectorOTF.core.compoundterm.primitiveterm.Prod@4439f31e added, to: direct-vm:port1
-it.univaq.disim.connectorOTF.core.compoundterm.primitiveterm.Prod@4439f31e Sending message a to Endpoint[direct-vm://port1]
+Component States: []
+Input Actions: []
+Output Actions: []
+Hidden Actions: []
+Transitions: []
+ added, to: mina:tcp://localhost:6898?textline=true&sync=false
+States: []
+Input Actions: []
+Output Actions: []
+Hidden Actions: []
+Transitions: []
+ Sending message b to Endpoint[mina://tcp://localhost:6898?sync=false&textline=true]

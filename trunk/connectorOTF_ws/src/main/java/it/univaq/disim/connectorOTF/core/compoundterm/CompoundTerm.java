@@ -1,23 +1,22 @@
 package it.univaq.disim.connectorOTF.core.compoundterm;
 
-import java.io.BufferedWriter;
-import java.io.File;
+import it.univaq.disim.connectorOTF.core.Port;
+import it.univaq.disim.connectorOTF.core.compoundterm.processors.LegalityProcessor;
+import it.univaq.disim.ips.core.Ips;
+import it.univaq.disim.ips.data.state.State;
+import it.univaq.disim.ips.data.transition.Transition;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
-
-import it.univaq.disim.connectorOTF.core.Port;
 
 /**
  * CompoundTerm is the main class of the package connector. Contains methods that permits
@@ -31,7 +30,7 @@ import it.univaq.disim.connectorOTF.core.Port;
  *
  */
 
-public abstract class CompoundTerm {
+public abstract class CompoundTerm extends Ips{
 
 	protected Collection<Port> sources_uri = new ArrayList<Port>();
 	protected Collection<Port> receivers_uri = new ArrayList<Port>();
@@ -44,14 +43,17 @@ public abstract class CompoundTerm {
 	private int id;
 	static public FileOutputStream fstream;
 	static public PrintWriter out;
+        //we need to keep in memory the current state of the IPS during its execution
+        protected State currentState;
 	
 	static{
 		try {
-			fstream = new FileOutputStream("log.txt");
-			fstream = new FileOutputStream("log.txt",true);
-			out = new PrintWriter(fstream);
+                        String path = "C:\\apache-tomcat-8.0.9\\bin\\log.txt";
 			
-			System.out.println("File di log "+System.getProperty("user.dir")+"/log.txt");
+                        System.out.println("Creating log.txt in "+ path);                        
+			//fstream = new FileOutputStream(path);
+			fstream = new FileOutputStream(path,true);
+			out = new PrintWriter(fstream);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -203,16 +205,20 @@ public abstract class CompoundTerm {
 	private void addInternalEndpoint(final Port source){
 		try {
 			//add new route that consumes from the uri of the source port
+                        final Processor legalState = new LegalityProcessor(this);
 			context.addRoutes(new RouteBuilder() {
 				@Override
 				public void configure() throws Exception {
 					// TODO Auto-generated method stub
+                                        
 					for(int i=0; i<source.getId().size(); i++){
 						from(source.getUri()).
+                                                //process(legalState).
 						process(new Processor() {
 							@Override
 							public void process(Exchange m) throws Exception {
 								// TODO Auto-generated method stub
+                                                                //m.getIn().getBody(String.class);
 								Collection<CompoundTerm> terms = source.getTerms();
 								for(Iterator<CompoundTerm> i = terms.iterator(); i.hasNext();){
 									CompoundTerm term = i.next();
@@ -333,4 +339,18 @@ public abstract class CompoundTerm {
 		System.out.println();
 	}
 	
+    @Override
+    public void setStart(State start) {
+        super.setStart(start); //To change body of generated methods, choose Tools | Templates.
+        currentState = start;
+}
+    
+    public State getCurrentState() {
+        return currentState;
+    }
+
+    public void setCurrentState(State currentState) {
+        this.currentState = currentState;
+    }
+        
 }

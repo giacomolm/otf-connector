@@ -1,14 +1,32 @@
 package it.univaq.disim.connectorOTF.core.compoundterm.primitiveterm;
 
+import static it.univaq.disim.connectorOTF.core.compoundterm.CompoundTerm.fstream;
+import static it.univaq.disim.connectorOTF.core.compoundterm.CompoundTerm.out;
 import it.univaq.disim.connectorOTF.core.exceptions.DefaultTransformLogicException;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DefaultTransformLogic {
 	
 	static Class out_type;
 	
+        FileOutputStream fstream;
+	static PrintWriter out = null;
+	
 	public DefaultTransformLogic() {
 		// TODO Auto-generated constructor stub
 		this.out_type = String.class;
+                
+                
+            try {                
+                fstream = new FileOutputStream("/usr/share/tomcat7/bin/log.txt",true);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(DefaultTransformLogic.class.getName()).log(Level.SEVERE, null, ex);
+	}
+		out = new PrintWriter(fstream,true);
 	}
 	
 	public DefaultTransformLogic(Class out_type) {

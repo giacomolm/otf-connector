@@ -7,6 +7,11 @@
 package it.univaq.disim.connectorOTF.controller;
 
 import it.univaq.disim.connectorOTF.core.compoundterm.CompoundTerm;
+import it.univaq.disim.ips.data.action.Action;
+import it.univaq.disim.ips.data.action.InputAction;
+import it.univaq.disim.ips.data.action.OutputAction;
+import it.univaq.disim.ips.data.state.State;
+import it.univaq.disim.ips.data.transition.Transition;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Constructor;
@@ -85,6 +90,7 @@ public class xmlImport {
                     catch(ClassNotFoundException e){
                         CompoundTerm object = getPrimitiveObject(className, elements.get(i));
                         object.start();
+                        
                     }                   
                     
                     Thread.sleep(5000);
@@ -94,6 +100,7 @@ public class xmlImport {
         catch(Exception e){
             System.err.println("Main Error "+e);
         }        
+       
     }
     
     public static ArrayList<CompoundTerm> getChild(Node node){
@@ -196,6 +203,7 @@ public class xmlImport {
             //we are assuming the first constructor is the right for reflexion
             Constructor<?> ctor = term_class.getConstructors()[0]; 
 
+          
             if(arguments.get("actions") != null){
                 Map actions = (Map) arguments.get("actions");
                 if(actions.get("input")!=null && actions.get("output") !=null){
@@ -233,7 +241,7 @@ public class xmlImport {
                         output_uri = (String) ((Map) actions.get("output")).get("uri");
                         output_type = Class.forName((String)((Map) actions.get("output")).get("type"));
                     }
-                    //System.out.println(input_uri);
+                    
                     object = (CompoundTerm) ctor.newInstance(new Object[] {input_uri, input_type, output_uri,output_type});
                 }
                 else if(actions.get("input")!=null){
@@ -253,6 +261,35 @@ public class xmlImport {
                 }
 
             }
+            
+            if(arguments.get("protocol") != null && object!=null){
+                Map protocol = (Map) arguments.get("protocol");
+               if(protocol.get("transitions")  instanceof List){
+                   List transitions = (List) protocol.get("transitions");
+                   int i;
+                   for(i=0; i<transitions.size(); i++){
+                       //getting the source of the transition
+                       State source = new State((String) ((Map) transitions.get(i)).get("source"));
+                       Action action = null;
+                       //getting the action, based on its type
+                       if(((String) ((Map) transitions.get(i)).get("actionType")).equals("input")){
+                        action = new InputAction((String) ((Map) transitions.get(i)).get("label"));
+                       }
+                       else if(((String) ((Map) transitions.get(i)).get("actionType")).equals("output")){
+                        action = new OutputAction((String) ((Map) transitions.get(i)).get("label"));
+                       }
+                       //getting the target of the transition
+                       State target = new State((String) ((Map) transitions.get(i)).get("target"));
+                       object.addTransition(new Transition(source, action, target));
+                   }
+               }
+               
+               //Setting the starting state
+                if(arguments.get("states") != null && object != null){
+                    //getting the starting state from the xml                    
+                    object.setStart(new State((String)((Map)arguments.get("states")).get("start")));                    
+                }
+            }            
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(xmlImport.class.getName()).log(Level.SEVERE, null, ex);    
         } catch (InstantiationException ex) {

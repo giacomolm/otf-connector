@@ -20,6 +20,7 @@
     <xs:sequence>
       <xs:element name="source" type="xs:string"/>
       <xs:element name="label" type="xs:string"/>
+      <xs:element name="actionType" type="xs:string"/>
       <xs:element name="target" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
