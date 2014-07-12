@@ -12,6 +12,9 @@ import org.apache.camel.builder.RouteBuilder;
 
 
 import it.univaq.disim.connectorOTF.core.Port;
+import it.univaq.disim.ips.data.action.Action;
+import it.univaq.disim.ips.data.state.State;
+import it.univaq.disim.ips.data.transition.Transition;
 
 /**
  * Cons class model concept of extra send primitive. This first mismatch 
@@ -42,6 +45,11 @@ public class Cons extends PrimitiveTerm{
 		addSource(source_port);
 		o = consumed_message;
                 source_uri = internal+""+getId();
+                //setting start state
+                setStart(new State("s0"));
+                //adding transition
+                addTransition(new Transition(new State("s0"), new Action((String)o),new State("s1")));
+                
 		out.append("Component "+this+" added, source: "+source_uri);
 		out.flush();
 	}
@@ -116,9 +124,9 @@ public class Cons extends PrimitiveTerm{
 	}
 
     @Override
-    public void updateUri(String old_uri, String new_uri) {
-        super.updateUri(old_uri, new_uri);
-        source_uri = new_uri;
+    public void updateUri(String old_uri, String new_sourceuri, String new_receiveruri) {
+        super.updateUri(old_uri, new_sourceuri, new_receiveruri);
+        source_uri = new_sourceuri;
     }
         
         

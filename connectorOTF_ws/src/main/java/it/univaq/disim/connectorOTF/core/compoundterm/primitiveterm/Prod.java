@@ -7,6 +7,9 @@ import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 
 import it.univaq.disim.connectorOTF.core.Port;
+import it.univaq.disim.ips.data.action.Action;
+import it.univaq.disim.ips.data.state.State;
+import it.univaq.disim.ips.data.transition.Transition;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -52,6 +55,10 @@ public class Prod extends PrimitiveTerm{
 		addReceiver(receiver_port);
 		prod = context.createProducerTemplate();
 		message = o;
+                //setting start state
+                setStart(new State("s0"));
+                //adding transition
+                addTransition(new Transition(new State("s0"), new Action((String)o),new State("s1")));
 		out.append("Component "+this+" added, to: "+receiverUri+"\n");
 		out.flush();
 	}
@@ -101,8 +108,8 @@ public class Prod extends PrimitiveTerm{
 	}
 
     @Override
-    public void updateUri(String old_uri, String new_uri) {
-        super.updateUri(old_uri, new_uri); //To change body of generated methods, choose Tools | Templates.
+    public void updateUri(String old_uri, String new_sourceuri, String new_receiveruri) {
+        super.updateUri(old_uri, new_sourceuri, new_receiveruri); //To change body of generated methods, choose Tools | Templates.
         receivers_port.add(new Port(old_uri, receiver_port.getType(), getId()));
     }
 
