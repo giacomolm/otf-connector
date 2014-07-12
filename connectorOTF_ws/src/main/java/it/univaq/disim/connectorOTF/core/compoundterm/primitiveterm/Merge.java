@@ -60,7 +60,7 @@ public class Merge extends PrimitiveTerm{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		out.append("Component "+this+" added, source: ("+internal+""+order+") to: "+receiveruri+"\n");
+		out.append("Component "+this+" added, source: ("+internal+""+getId()+") to: "+receiveruri+"\n");
 		out.flush();
 	}
 	
@@ -97,7 +97,7 @@ public class Merge extends PrimitiveTerm{
 						@Override
 						public void process(Exchange arg0) throws Exception {
 							// TODO Auto-generated method stub
-                                                        System.out.println("Aggregation result "+arg0);
+                                                        System.out.println("Aggregation complete "+arg0);
 							for(int i=0; i<sequence.length; i++){
 								//dobbiamo azzerare il fatto che abbiamo ricevuto un messaggio di quel tipo
 								sequence[i]=false;

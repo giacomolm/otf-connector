@@ -7,6 +7,10 @@ import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 
 import it.univaq.disim.connectorOTF.core.Port;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Prod class implements missing send primitive introduced with connector 
@@ -31,6 +35,7 @@ public class Prod extends PrimitiveTerm{
 	PrimitiveTerm p = null;
 	String receiver;
 	Port receiver_port;
+        List<Port> receivers_port = new ArrayList<Port>() ;
 	
 	private Object message;
 	
@@ -57,10 +62,18 @@ public class Prod extends PrimitiveTerm{
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
-		super.start();
-		out.append(this+" Sending message "+message+" to "+context.getEndpoint(receiver_port.getUri())+"\n");
-		out.flush();
-		producer.sendBody(context.getEndpoint(receiver_port.getUri()), message);
+		super.start();		
+                for(Iterator<Port> i = receivers_port.iterator(); i.hasNext();){
+                    try {
+                        Port p = i.next();
+                        out.append(this+" Sending message "+message+" to "+context.getEndpoint(p.getUri())+"\n");
+                        out.flush();                       
+                        producer.sendBody(context.getEndpoint(p.getUri()), message);
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Prod.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
 	}
 
 	/**
@@ -87,15 +100,24 @@ public class Prod extends PrimitiveTerm{
 		this.receiver = receiver;
 	}
 
-	/**
-	 * Method inherited by the compound term which allows setting
-	 * input message in this term. Due this term not consumes 
-	 * anything, methods definition is leaved empty.
-	 */
-	@Override
-	public void setMessage(String uri, Exchange e) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void updateUri(String old_uri, String new_uri) {
+        super.updateUri(old_uri, new_uri); //To change body of generated methods, choose Tools | Templates.
+        receivers_port.add(new Port(old_uri, receiver_port.getType(), getId()));
+    }
 
+    @Override
+    public void setMessage(String uri, Exchange e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addReceiver(Port receiver) {
+        super.addReceiver(receiver); //To change body of generated methods, choose Tools | Templates.
+        receivers_port.add(receiver);
+    }
+
+    
+
+        
 }

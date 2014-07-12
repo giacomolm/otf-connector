@@ -6,13 +6,12 @@
 
 package it.univaq.disim.connectorOTF.core.compoundterm.primitiveterm;
 
-import org.apache.camel.Exchange;
+import it.univaq.disim.connectorOTF.core.compoundterm.primitiveterm.Prod;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
 
 /**
  *
@@ -47,16 +46,16 @@ public class ProdTest {
         
         
         try {
-                Prod instance = new Prod("mina:tcp://localhost:6898?textline=true&sync=false", String.class, "b");
-                instance.start();
-                Thread.sleep(1000);
+                Prod instance1 = new Prod("mina:tcp://localhost:6897?textline=true&sync=false", String.class, "a");
+                instance1.start();
+                Thread.sleep(2000);
         } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
         }
         catch(Exception e){
             
-    }
+        }
     }
 
     
