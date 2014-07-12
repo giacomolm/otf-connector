@@ -312,9 +312,9 @@ public class xmlImport {
             Class term_class = Class.forName("it.univaq.disim.connectorOTF.core.compoundterm."+className);
             
             List childTerms = getChild(element);
-            
-            System.out.println(childTerms);
+                       
             Constructor<?> ctor = term_class.getConstructors()[0];
+            
             
             object = (CompoundTerm) ctor.newInstance(new Object[] { childTerms.get(0), childTerms.get(1) });
             
@@ -327,7 +327,7 @@ public class xmlImport {
         } catch (InvocationTargetException ex) {
             Logger.getLogger(xmlImport.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        System.out.println(object);
         return object;
     }
     

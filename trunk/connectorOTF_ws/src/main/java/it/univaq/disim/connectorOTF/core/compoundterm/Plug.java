@@ -36,7 +36,9 @@ public class Plug extends CompoundTerm{
                 
                 Ips composition = c1.composition(c2);
                 setStart(composition.getStart());
-                setTransitions(composition.getTransitions());                
+                setTransitions(composition.getTransitions());  
+                
+                
 	}
 	
 	/**

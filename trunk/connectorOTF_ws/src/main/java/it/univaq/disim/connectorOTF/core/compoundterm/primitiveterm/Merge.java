@@ -110,7 +110,7 @@ public class Merge extends PrimitiveTerm{
 				}
 			});
 			out.append("Component "+this+" started, source: ("+internal+""+getId()+") completion size:"+completition_size+"\n");                       
-			out.close();
+			out.flush();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -146,4 +146,6 @@ public class Merge extends PrimitiveTerm{
 	public void setCompletitionSize(int size){
 		this.completition_size = size;
 	}
+        
+        
 }

@@ -89,9 +89,12 @@ public abstract class CompoundTerm extends Ips{
                 
 		if(temp!=null){
 			//devo aggiungere un canale interno
+                        updateUris(temp.getUri(), "vm:common"+(common+1),"vm:common"+common);
+                        source.setUri("vm:common"+(common+1));
 			addInternalEndpoint(source);
+                        common++;
 			//removePort(receivers_uri, source);
-                        updateUris(temp.getUri(), "vm:common"+common++);
+                        
 		}
 		else {
 			temp =includePort(source, sources_uri);
@@ -116,9 +119,12 @@ public abstract class CompoundTerm extends Ips{
 			Port temp = includePort(p,receivers_uri);
 			if(temp!=null){
 				//devo aggiungere un canale interno
-				addInternalEndpoint(p);                                
+                                updateUris(temp.getUri(), "vm:common"+(common+1),"vm:common"+common);
+                                p.setUri("vm:common"+(common+1));
+				addInternalEndpoint(p);   
+                                common++;
 				//removePort(receivers_uri, p);
-                                updateUris(temp.getUri(), "vm:common"+common++);
+                                
 			}
 			else {
 				temp = includePort(p, sources_uri);
@@ -140,8 +146,10 @@ public abstract class CompoundTerm extends Ips{
 		Port temp = includePort(receiver, sources_uri);
 		if(temp!=null){
 			//devo aggiungere un canale interno
+                        updateUris(temp.getUri(), "vm:common"+(common+1),"vm:common"+common);
+                        temp.setUri("vm:common"+(common+1));
 			addInternalEndpoint(temp);
-                        updateUris(temp.getUri(), "vm:common"+common++);
+                        common++;
 			removePort(sources_uri, temp);
 		}
 		else {
@@ -174,8 +182,10 @@ public abstract class CompoundTerm extends Ips{
 			Port temp = includePort(p, sources_uri);
 			if(temp!=null){
 				//devo aggiungere un canale interno
+                                updateUris(temp.getUri(), "vm:common"+(common+1),"vm:common"+common);
+                                p.setUri("vm:common"+(common+1));
 				addInternalEndpoint(p);
-                                updateUris(temp.getUri(), "vm:common"+common++);
+                                common++;
 				removePort(sources_uri,p);
 			}
 			else {
@@ -229,7 +239,8 @@ public abstract class CompoundTerm extends Ips{
 								Collection<CompoundTerm> terms = source.getTerms();
 								for(Iterator<CompoundTerm> i = terms.iterator(); i.hasNext();){
 									CompoundTerm term = i.next();
-									term.setMessage("vm:common"+common,m);
+                                                                        out.append("Forwarding "+m+" to "+source.getUri()+"\n");
+									term.setMessage(source.getUri(),m);
 								}
 							}
 						});
@@ -360,27 +371,28 @@ public abstract class CompoundTerm extends Ips{
         this.currentState = currentState;
     }
     
-    public void updateUris(String old_uri, String new_uri){
+    public void updateUris(String old_uri, String new_sourceuri, String new_receiveruri){
         for(Iterator<CompoundTerm> i = component.iterator(); i.hasNext();){
             CompoundTerm c = i.next();
-            c.updateUri(old_uri, new_uri);
+            c.updateUri(old_uri, new_sourceuri, new_receiveruri);
             
         }
     }
     
-    public void updateUri(String old_uri, String new_uri){
+    public void updateUri(String old_uri, String new_sourceuri, String new_receiveruri){
         
+            out.append("Updating uri "+old_uri+" in "+this+"\n");
             for(Iterator<Port> j = getSources().iterator(); j.hasNext();){
                 Port p = j.next();
                 if(p.getUri().equals(old_uri)){
-                    p.setUri(new_uri);
+                    p.setUri(new_sourceuri);
                 }
             }
             
             for(Iterator<Port> j = getReceivers().iterator(); j.hasNext();){
                 Port p = j.next();
                 if(p.getUri().equals(old_uri)){
-                    p.setUri(new_uri);
+                    p.setUri(new_receiveruri);
                 }
             }
     }
