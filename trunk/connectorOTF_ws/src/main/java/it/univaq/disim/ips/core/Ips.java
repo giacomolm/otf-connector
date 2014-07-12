@@ -23,6 +23,7 @@ import it.univaq.disim.ips.data.action.HiddenAction;
 import it.univaq.disim.ips.data.action.InputAction;
 import it.univaq.disim.ips.data.action.OutputAction;
 import it.univaq.disim.ips.data.state.BinaryState;
+import it.univaq.disim.ips.data.state.StartState;
 import it.univaq.disim.ips.data.state.State;
 import it.univaq.disim.ips.data.transition.Transition;
 import java.util.ArrayList;
@@ -585,6 +586,7 @@ public class Ips {
         
         //Building the resulting IPS
         result.setStates(states);
+        result.setStart(new BinaryState(this.getStart(), ips.getStart()));
         result.setInputs(in_actions);
         result.setOutputs(out_actions);
         result.setHiddens(hidden_actions);
@@ -947,7 +949,7 @@ public class Ips {
         
         
         return result;
-    }*/
+    }
 
     @Override
     public String toString() {
@@ -957,7 +959,7 @@ public class Ips {
                 "Output Actions: "+this.outputs+"\n"+
                 "Hidden Actions: "+this.hiddens+"\n"+
                 "Transitions: "+this.transitions+"\n";
-    }
+    }*/
     
     
 }

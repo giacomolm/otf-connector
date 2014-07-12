@@ -1,13 +1,12 @@
 package it.univaq.disim.connectorOTF.core.compoundterm;
 
+import it.univaq.disim.connectorOTF.core.Port;
+import it.univaq.disim.ips.core.Ips;
 import java.util.Collection;
 import java.util.Iterator;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
-
-import it.univaq.disim.connectorOTF.core.Port;
 
 /**
  * Plug class define the plugging operator introduced in the connector algebra
@@ -34,6 +33,10 @@ public class Plug extends CompoundTerm{
 		c2.setComposed();
 		addComponent(c1);
 		addComponent(c2);
+                
+                Ips composition = c1.composition(c2);
+                setStart(composition.getStart());
+                setTransitions(composition.getTransitions());                
 	}
 	
 	/**

@@ -35,6 +35,7 @@ public abstract class PrimitiveTerm extends CompoundTerm {
 	 */
 	public void start(){
 		try {
+                        //routes are added only if the term is not composed!
 			if(!composed){ // c'era order
 					Iterator<Port> p = sources_uri.iterator();
 					while(p.hasNext()){
@@ -47,13 +48,14 @@ public abstract class PrimitiveTerm extends CompoundTerm {
 							public void configure() throws Exception {
 								// TODO Auto-generated method stub
 								from(context.getEndpoint(temp.getUri())).
-                                                    process(legalState).
+                                                                process(legalState).
 								process(new Processor() {
 									@Override
 									public void process(Exchange e) throws Exception {
-                                                                    //setting message for the right uri
-                                                                    out.println("Consumed from "+temp.getUri()+" exchange"+e);
-										setMessage(temp.getUri(), e);
+                                                                            
+                                                                            out.println("Consumed from "+temp.getUri()+" exchange"+e);
+                                                                            //setting message for the right uri
+                                                                            setMessage(temp.getUri(), e);
 									}
 								});
 								//to(internal+""+temp.getId().get(0));

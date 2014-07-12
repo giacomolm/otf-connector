@@ -26,6 +26,7 @@ import it.univaq.disim.connectorOTF.core.Port;
  */
 public class Cons extends PrimitiveTerm{
 	Port source_port;
+        String source_uri;
 	Object consumed_message;
         
         /**
@@ -40,7 +41,8 @@ public class Cons extends PrimitiveTerm{
 		source_port = new Port(sourceUri,in_type,getId()); 
 		addSource(source_port);
 		o = consumed_message;
-		out.append("Component "+this+" added, source:  ("+internal+""+getId()+")");
+                source_uri = internal+""+getId();
+		out.append("Component "+this+" added, source: "+source_uri);
 		out.flush();
 	}
         
@@ -54,7 +56,8 @@ public class Cons extends PrimitiveTerm{
 	public Cons(final String sourceUri, Class in_type) {
 		source_port = new Port(sourceUri,in_type,getId()); 
 		addSource(source_port);
-		out.append("Component "+this+" added, source:  ("+internal+""+getId()+")");
+                source_uri = internal+""+getId();
+		out.append("Component "+this+" added, source:  "+source_uri);
 		out.flush();
 	}
 	
@@ -73,7 +76,7 @@ public class Cons extends PrimitiveTerm{
 				@Override
 				public void configure() throws Exception {
 					// TODO Auto-generated method stub
-					from(internal+""+getId()).
+					from(source_uri).
 					process(new Processor() {
 						@Override
 						public void process(Exchange e) throws Exception {
@@ -84,7 +87,7 @@ public class Cons extends PrimitiveTerm{
 					});
 				}
 			});
-			out.append("Component "+this+" started\n");
+			out.append("Component "+this+" started and consuming from "+source_uri+"\n");
 			out.flush();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -111,5 +114,13 @@ public class Cons extends PrimitiveTerm{
 	public Object getConsumedMessage(){
 		return consumed_message;
 	}
+
+    @Override
+    public void updateUri(String old_uri, String new_uri) {
+        super.updateUri(old_uri, new_uri);
+        source_uri = new_uri;
+    }
+        
+        
 	
 }

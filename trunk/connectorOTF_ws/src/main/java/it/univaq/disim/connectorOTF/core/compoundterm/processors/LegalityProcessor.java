@@ -24,11 +24,9 @@ public class LegalityProcessor implements Processor{
     
     @Override
     public void process(Exchange exchng) throws Exception {
-        
-        if(!term.isComposed()){
-            if(!checkLegality(exchng.getIn().getBody(String.class))){
-                throw new DefaultIllegalStateException("Cannot match input action with the one expected in the IPS");
-            }
+              
+        if(!checkLegality(exchng.getIn().getBody(String.class))){
+            throw new DefaultIllegalStateException("Cannot match input action with the one expected in the IPS");
         }
     }
     
@@ -39,6 +37,7 @@ public class LegalityProcessor implements Processor{
      */
     public boolean checkLegality(String actionName){
         int i;
+        
         for(i=0; i<term.getTransitions().size(); i++){
             //consider only transition with source equal to current state
             Transition t = term.getTransitions().get(i);
