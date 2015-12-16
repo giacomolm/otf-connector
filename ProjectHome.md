@@ -1,0 +1,11 @@
+The project provides an API (called CABAC) for the actual implementation of software connectors, whose aim is to ensure interoperability among heterogeneous software entities, based on a mediator algebra developed within the Work Package WP2 of the CONNECT EU project (https://www.connect-forever.eu/). The implementation of the API is based on the use of  Enterprise Integration Patterns (http://www.eaipatterns.com/) and is developed through the Apache Camel framework (http://camel.apache.org/).
+
+The mediator algebra attempts to structure the concept of software connector treating it like a suitable composition of mediation primitives. The provided API is an object-oriented implementation of both the algebra primitives and the composition operators.
+
+Suppose that we have two or more applications that wish to interoperate. Often, these applications do not interact by following the same protocol. For example a sender application sends a single message, while the receivers expects a set of related submessage. If we are dealing with black-box applications, and hence we cannot change their implementation, we can interpose a connector between these applications in order to achieve interoperability. For example, in our case, we need a "splitter" that receives an incoming message by the sender and, relying on a specified splitting logic (by the connector developer), splits the message into several related messages and sends them to the respective receivers.
+
+The main goal is to express the development concepts existing in Camel and re-expose them to connector developers by following the modular structure defined by the above mentioned algebra where mediation primitives and composition operators become first-class entities for writing the actual code implementing a software connector.
+
+The main goal of this blog is show how to work with this API, and model (i hope together) some real scenario.
+
+If someone is interested, i'm glad to give you material and further explanation. Please contact me to giacomolm@gmail.com.
